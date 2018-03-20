@@ -7,7 +7,7 @@ using UnityEngine;
 public class GPS : MonoBehaviour {
     public static GPS Instance { set; get; }
 
-    public float latitude, longitude, altitude;
+    public float latitude, longitude, altitude, x, y, z;
     private int maxAttempts = 20;
     private int numFramesToRefreshLocation = 150;
     private RESTServicesManager restManager;
@@ -66,7 +66,7 @@ public class GPS : MonoBehaviour {
         latitude = Input.location.lastData.latitude;
         longitude = Input.location.lastData.longitude;
         //altitude = Input.location.lastData.altitude;  // this altitude is not good
-        altitude = restManager.getElevation(latitude, longitude);
+        altitude = restManager.getElevation(longitude, latitude);
         /*
         if(altitude == 0)
         {
@@ -74,6 +74,15 @@ public class GPS : MonoBehaviour {
             altitude = restManager.getElevation(latitude, longitude);
         }
         */
+
+        toLocalCoordinates();
         yield break;
+    }
+
+    private void toLocalCoordinates()
+    {
+        x = longitude;
+        z = latitude;
+        y = altitude;
     }
 }

@@ -6,6 +6,6 @@ public class UIManager : MonoBehaviour {
 
 	public void mapViewBTN_click()
     {
-        Debug.Log("U pressed da batn");
+        Debug.Log("Button pressed");
     }
 }
