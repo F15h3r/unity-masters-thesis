@@ -467,7 +467,7 @@ PlayerSettings:
     Collab: 0
     ErrorHub: 0
     Hub: 0
-    UNet: 1
+    UNet: 0
   cloudProjectId: 5fce6f06-ebdf-48d6-a6cd-050c99923dc5
   projectName: Masters thesis
   organizationId: f15h3r

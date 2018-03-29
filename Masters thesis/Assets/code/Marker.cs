@@ -11,13 +11,13 @@ namespace Assets.code
         private float longitude;
         private float latitude;
         private float altitude;
+        public float markerX, markerY, markerZ;
 
         private string tag { get; set; }
-        private RESTServicesManager rsm;
 
         public Marker()
         {
-            longitude = latitude = altitude = float.MinValue;
+            longitude = latitude = altitude = markerX = markerY = float.MinValue;
         }
 
         public Marker(float lon, float lat, bool altitudeFromGoogle = true)
@@ -78,19 +78,26 @@ namespace Assets.code
 
         public void setAltitudeFromRESTService()
         {
-            if (altitude != float.MinValue || longitude != float.MinValue)
+            if (latitude != float.MinValue && longitude != float.MinValue)
             {
-                if (rsm == null)
-                    rsm = new RESTServicesManager();
-                altitude = rsm.getElevation(longitude, latitude);
+                altitude = RESTServicesManager.Instance.getElevation(longitude, latitude);
             }
             else
-                Debug.Log("LONGITUDE OR ALTITUDE NOT SET! CHECK: " + ToString());
+                Debug.Log("LONGITUDE OR LATITUDE NOT SET! CHECK: " + ToString());
         }
 
-        public void translateRelativeToUser(float uLon, float uLat)
+        public void translateRelativeToUser()
         {
-            Debug.Log("TODO");
+            if (latitude != float.MinValue && longitude != float.MinValue)
+            {
+                markerX = -GPS.Instance.latitude + latitude * 10;
+                markerY = -GPS.Instance.longitude + longitude * 10;
+                markerZ = -GPS.Instance.altitude + altitude * 10;
+                Debug.Log("MARKER: " + markerX + " " + markerY + " " + markerZ);
+            }
+            else
+                Debug.Log("LONGITUDE OR LATITUDE NOT SET! CHECK: " + ToString());
         }
+
     }
 }

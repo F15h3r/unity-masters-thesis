@@ -10,6 +10,12 @@ public class RESTServicesManager : MonoBehaviour
 {
     private float lat, lon, alt = float.MinValue;
     private static string googleApiKey = "AIzaSyCLi-ps7SPuoG5UAOLsElu_QhD11K-l0xw";
+    public static RESTServicesManager Instance { get; set; }
+
+    private void Start()
+    {
+        Instance = this;
+    }
 
     public float getElevation(float lon, float lat)
     {

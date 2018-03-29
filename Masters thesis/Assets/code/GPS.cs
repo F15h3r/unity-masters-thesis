@@ -10,7 +10,6 @@ public class GPS : MonoBehaviour {
     public float latitude, longitude, altitude, x, y, z;
     private int maxAttempts = 20;
     private int numFramesToRefreshLocation = 150;
-    private RESTServicesManager restManager;
 
     private void Start()
     {
@@ -18,7 +17,7 @@ public class GPS : MonoBehaviour {
         DontDestroyOnLoad(gameObject);
         StartCoroutine(StartLocationService());
         //restManager = new RESTServicesManager();
-        restManager = gameObject.AddComponent(typeof(RESTServicesManager)) as RESTServicesManager;
+        
     }
 
     private void Update()
@@ -66,7 +65,8 @@ public class GPS : MonoBehaviour {
         latitude = Input.location.lastData.latitude;
         longitude = Input.location.lastData.longitude;
         //altitude = Input.location.lastData.altitude;  // this altitude is not good
-        altitude = restManager.getElevation(longitude, latitude);
+        //altitude = restManager.getElevation(longitude, latitude);
+        altitude = RESTServicesManager.Instance.getElevation(longitude, latitude);
         /*
         if(altitude == 0)
         {
@@ -81,8 +81,8 @@ public class GPS : MonoBehaviour {
 
     private void toLocalCoordinates()
     {
-        x = longitude;
-        z = latitude;
-        y = altitude;
+        x = (int)longitude*10;
+        z = (int)latitude*10;
+        y = (int)altitude;
     }
 }
