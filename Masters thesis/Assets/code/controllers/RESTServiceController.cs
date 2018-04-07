@@ -43,7 +43,7 @@ public class RESTServiceController : MonoBehaviour
         }
         else
             Debug.Log(www.error);
-        Debug.Log("ALTITUDE FOR MARKER " + marker.GetComponent<Marker>().text + " is " + marker.GetComponent<Marker>().worldCoords.y.ToString());
+        //Debug.Log("ALTITUDE FOR MARKER " + marker.GetComponent<Marker>().text + " is " + marker.GetComponent<Marker>().worldCoords.y.ToString());
     }
     
     // set elevation to worldCords Vector3 variable

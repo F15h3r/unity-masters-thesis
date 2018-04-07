@@ -11,19 +11,9 @@ namespace Assets.code
     {
         public Vector3 worldCoords;
         public Vector3 markerPosition; // TODO: set private?
-
-        public string text
-        {
-            set
-            {
-                GetComponentInChildren<UnityEngine.UI.Text>().text = value;
-            }
-            get
-            {
-                return GetComponentInChildren<UnityEngine.UI.Text>().text;
-            }
-        }
-
+        private float distanceToUser = 0;
+        public string text;
+        
         public Marker(float lat, float lon)
         {
             worldCoords = new Vector3();
@@ -86,26 +76,54 @@ namespace Assets.code
             return false;
         }
 
+        private void setMarkerText(string content)
+        {
+            GetComponentInChildren<UnityEngine.UI.Text>().text = content;
+        }
+
         public void setRelativeGamePosition()
         {
             markerPosition = new Vector3();
-            if (worldCoords != null && GPSController.Instance.userLocationStable)
+            if (GPSController.Instance.userLocationStable)
             {
-                //Debug.Log("USER LOCATION ON MARKER UPDATE: " + GPSController.Instance.userWorldLocation.ToString());
-
                 markerPosition.x = -(-GPSController.Instance.userWorldLocation.x + worldCoords.x) * MarkerController.markerScale.x;
                 markerPosition.z = -(-GPSController.Instance.userWorldLocation.z + worldCoords.z) * MarkerController.markerScale.z;
                 if (worldCoords.y == float.MinValue)
                     markerPosition.y = 0; // if no altitude information available, show marker at user altitude
                 else
                     markerPosition.y = (-GPSController.Instance.userWorldLocation.y + worldCoords.y) * MarkerController.markerScale.y;
-
-                //Debug.Log("MARKER worldLocation: " + worldPosition.ToString()+ " gamePosition: " + markerPosition.ToString() + " text: " + text);
+                
+                setMarkerText(text + "\n" + getDistanceToUser());
+                //Debug.Log("MARKER: " + text + " - worldLocation: " + worldCoords.ToString()+ " gamePosition: "
+                //    + markerPosition.ToString() + " game distance to user:" + Vector3.Distance(markerPosition, new Vector3(0,0,0)));
             }
             else
                 Debug.LogError("LONGITUDE/LATITUDE NOT SET, OR USER LOCATION UNKNOWN (YET?)");
 
             transform.position = markerPosition;
+        }
+
+        private void setDistanceToUser()
+        {
+            float ML = (worldCoords.z + GPSController.Instance.userWorldLocation.z) / 2;
+            
+            float KPD_lat = (float)(111.13209 - 0.56605 * Math.Cos(2 * ML) + 0.0012 * Math.Cos(4 * ML));
+            float KPD_lon = (float)(111.41513 * Math.Cos(ML) - 0.09455 * Math.Cos(3 * ML) + 0.00012 * Math.Cos(5 * ML));
+            float NS = KPD_lat * (worldCoords.z - GPSController.Instance.userWorldLocation.z);
+            float EW = KPD_lon * (worldCoords.z - GPSController.Instance.userWorldLocation.z);
+            Debug.Log("DIST = " + (float)Math.Sqrt(NS * NS + EW * EW) + "km");
+            distanceToUser = (float)Math.Sqrt(NS * NS + EW * EW) * 1000;
+        }
+
+        public string getDistanceToUser()
+        {
+            setDistanceToUser();
+            if (distanceToUser > 1000)
+                return (distanceToUser / 1000).ToString("0.0") + "km";
+            if (distanceToUser < 1000)
+                return ((Math.Round(distanceToUser/100, 0)*100)).ToString() + "m";
+            else
+                return distanceToUser.ToString("0") + "m";
         }
     }
 }

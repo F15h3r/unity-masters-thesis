@@ -10,7 +10,8 @@ public class GPSController : MonoBehaviour {
     public bool userLocationStable = false;
     private RESTServiceController rsc;
     private int maxAttempts = 20;
-    private int numFramesToRefreshLocation = 150;
+    public float refreshLocationInterval = 5;
+    private float timeSinceLastRefresh = 0;
 
     private void Awake()
     {
@@ -21,22 +22,19 @@ public class GPSController : MonoBehaviour {
 
     private void Start()
     {
-
-        //DontDestroyOnLoad(gameObject);
+        DontDestroyOnLoad(gameObject);
         StartCoroutine(startLocationService());
     }
 
     private void Update()
     {
-        if (numFramesToRefreshLocation < 0)
+        timeSinceLastRefresh += Time.unscaledDeltaTime;
+
+        if (timeSinceLastRefresh >= refreshLocationInterval)
         {
             //Debug.Log("UPDATE USER LOCATION NOW!");
-            numFramesToRefreshLocation = 300;
+            timeSinceLastRefresh = 0;
             StartCoroutine(startLocationService());
-        }
-        else
-        {
-            numFramesToRefreshLocation--;
         }
     }
 
@@ -44,7 +42,8 @@ public class GPSController : MonoBehaviour {
     {
         if(!Input.location.isEnabledByUser)
         {
-            Debug.Log("USER GAVE NO PERMISSION TO ACCESS GPS");
+            locationError("USER GAVE NO PERMISSION TO ACCESS GPS");
+
             yield break;
         }
 
@@ -58,25 +57,39 @@ public class GPSController : MonoBehaviour {
 
         if(maxAttempts <= 0)
         {
-            Debug.Log("TIMED OUT: CAN'T DETERMINE LOCATION");
+            locationError("TIMED OUT: CAN'T DETERMINE LOCATION");
+
             yield break;
         }
 
         if(Input.location.status == LocationServiceStatus.Failed)
         {
-            Debug.Log("GPS ERROR");
+            locationError("UNKNOWN GPS ERROR");
+
             yield break;
         }
 
-        userWorldLocation.z = Input.location.lastData.latitude;
-        userWorldLocation.x = Input.location.lastData.longitude;
-        //altitude = Input.location.lastData.altitude;  // this altitude is not good
-
-        userWorldLocation.y = rsc.getUserElevation(userWorldLocation).y;
-
-        if (userWorldLocation.z != float.MinValue && userWorldLocation.x != float.MinValue)
+        if (Input.location.lastData.latitude != 0 && Input.location.lastData.longitude != 0)
+        {
+            userWorldLocation.z = Input.location.lastData.latitude;
+            userWorldLocation.x = Input.location.lastData.longitude;
+            userWorldLocation.y = rsc.getUserElevation(userWorldLocation).y;
             userLocationStable = true;
+        }
+        else
+        {
+            userLocationStable = false;
+            Debug.LogError("location NOT found! atempts: " + (20 - maxAttempts) + " your location: lat:"
+                + Input.location.lastData.latitude +" lon:"+ Input.location.lastData.longitude);
+        }
 
         yield break;
+    }
+
+    private void locationError(string msg)
+    {
+        Debug.Log(msg);
+        userLocationStable = false;
+        userWorldLocation = new Vector3(float.MinValue, float.MinValue, float.MinValue);
     }
 }

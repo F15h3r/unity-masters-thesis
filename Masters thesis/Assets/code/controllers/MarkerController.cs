@@ -56,7 +56,6 @@ public class MarkerController : MonoBehaviour {
             Instantiate(markerPrefab, transform.position, Quaternion.identity, parentObject.transform) as GameObject;
 
         markers.Add(markerPrefabClone);
-
         markerPrefabClone.GetComponent<Marker>().setLatitude(worldCoords.z);
         markerPrefabClone.GetComponent<Marker>().setLongitude(worldCoords.x);
         markerPrefabClone.GetComponent<Marker>().text = markerText;
@@ -67,7 +66,6 @@ public class MarkerController : MonoBehaviour {
         markerPrefabClone.transform.Rotate(new Vector3(0, 180, 0)); // Rotate the prefab
         markerPrefabClone.transform.LookAt(new Vector3(0, -20, 0)); // Look at the camera
 
-        
 
     }
 
