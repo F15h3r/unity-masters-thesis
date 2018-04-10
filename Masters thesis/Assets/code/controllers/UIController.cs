@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class UIController : MonoBehaviour {
 
-	public void mapViewBTN_click()
+	public void showMarkersListBtn_click()
     {
-        Debug.Log("Button pressed");
+        Debug.Log("TODO: SHOW MARKERS LIST");
     }
 
 }

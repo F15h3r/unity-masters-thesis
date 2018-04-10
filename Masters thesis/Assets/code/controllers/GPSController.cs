@@ -8,16 +8,16 @@ public class GPSController : MonoBehaviour {
     public static GPSController Instance { set; get; }
     public Vector3 userWorldLocation;
     public bool userLocationStable = false;
-    private RESTServiceController rsc;
+    private GoogleAltitudeController rsc;
     private int maxAttempts = 20;
-    public float refreshLocationInterval = 5;
+    public float refreshInterval = 5;
     private float timeSinceLastRefresh = 0;
 
     private void Awake()
     {
         Instance = this;
         userWorldLocation = new Vector3(float.MinValue, float.MinValue, float.MinValue);
-        rsc = gameObject.AddComponent(typeof(RESTServiceController)) as RESTServiceController;        
+        rsc = gameObject.AddComponent(typeof(GoogleAltitudeController)) as GoogleAltitudeController;        
     }
 
     private void Start()
@@ -30,7 +30,7 @@ public class GPSController : MonoBehaviour {
     {
         timeSinceLastRefresh += Time.unscaledDeltaTime;
 
-        if (timeSinceLastRefresh >= refreshLocationInterval)
+        if (timeSinceLastRefresh >= refreshInterval)
         {
             //Debug.Log("UPDATE USER LOCATION NOW!");
             timeSinceLastRefresh = 0;
@@ -79,7 +79,7 @@ public class GPSController : MonoBehaviour {
         else
         {
             userLocationStable = false;
-            Debug.LogError("location NOT found! atempts: " + (20 - maxAttempts) + " your location: lat:"
+            Debug.LogError("location NOT found! atempts: " + (20 - maxAttempts) + " current location reading = lat:"
                 + Input.location.lastData.latitude +" lon:"+ Input.location.lastData.longitude);
         }
 

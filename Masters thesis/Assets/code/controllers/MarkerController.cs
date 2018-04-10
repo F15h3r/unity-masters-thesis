@@ -9,7 +9,7 @@ public class MarkerController : MonoBehaviour {
     public static Vector3 markerScale;
     public GameObject markerPrefab, parentObject;
     private GameObject markerPrefabClone;
-    private RESTServiceController rsc;
+    private GoogleAltitudeController rsc;
     private List<GameObject> markers;
     private int framesToReload = 150;
 
@@ -18,7 +18,7 @@ public class MarkerController : MonoBehaviour {
         DontDestroyOnLoad(this);
         markerScale = new Vector3(15000, 1, 15000); // TODO: read from userPrefs
         markers = new List<GameObject>();
-        rsc = gameObject.AddComponent(typeof(RESTServiceController)) as RESTServiceController;
+        rsc = gameObject.AddComponent(typeof(GoogleAltitudeController)) as GoogleAltitudeController;
 
         //showMarkerFromPrefab(new Vector3(100, 100, 100), "100, 100, 100");
         //showMarkerFromPrefab(new Vector3(-100, -100, -100), "-100, -100, -100");

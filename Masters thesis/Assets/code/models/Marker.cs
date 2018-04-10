@@ -111,7 +111,7 @@ namespace Assets.code
             float KPD_lon = (float)(111.41513 * Math.Cos(ML) - 0.09455 * Math.Cos(3 * ML) + 0.00012 * Math.Cos(5 * ML));
             float NS = KPD_lat * (worldCoords.z - GPSController.Instance.userWorldLocation.z);
             float EW = KPD_lon * (worldCoords.z - GPSController.Instance.userWorldLocation.z);
-            Debug.Log("DIST = " + (float)Math.Sqrt(NS * NS + EW * EW) + "km");
+            //Debug.Log("DIST = " + (float)Math.Sqrt(NS * NS + EW * EW) + "km");
             distanceToUser = (float)Math.Sqrt(NS * NS + EW * EW) * 1000;
         }
 

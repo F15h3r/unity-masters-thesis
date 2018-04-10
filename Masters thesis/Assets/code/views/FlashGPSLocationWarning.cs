@@ -15,16 +15,18 @@ public class FlashGPSLocationWarning: MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update ()
-    { 
-        if(!GPSController.Instance.userLocationStable)
+    {
+        if (!GPSController.Instance.userLocationStable)
         {
             currentDuration += Time.unscaledDeltaTime;
-            if(currentDuration >= duration)
+            if (currentDuration >= duration)
             {
                 currentDuration = 0;
                 img.enabled = !img.enabled;
             }
         }
+        else
+            img.enabled = false;
 
     }
 }
