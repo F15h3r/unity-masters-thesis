@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Assets.code.models;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,15 +10,12 @@ namespace Assets.code
 {
     class Marker : MonoBehaviour
     {
-        public Vector3 worldCoords;
-        public Vector3 markerPosition; // TODO: set private?
-        private float distanceToUser = 0;
-        public string text;
-        
+        public MarkerData data;
+        /*
         public Marker(float lat, float lon)
         {
-            worldCoords = new Vector3();
-            worldCoords.y = float.MinValue;
+            data.worldCoords = new Vector3();
+            data.worldCoords.y = float.MinValue;
 
             setLongitude(lon);
             setLatitude(lat);
@@ -25,7 +23,7 @@ namespace Assets.code
 
         public Marker(Vector3 worldCoords)
         {
-            this.worldCoords = new Vector3();
+            data.worldCoords = new Vector3();
             worldCoords.y = float.MinValue;
 
             setLongitude(worldCoords.x);
@@ -38,92 +36,118 @@ namespace Assets.code
             setLatitude(lat);
             setAltitude(alt);
         }
+        */
+
+        public void Setup(Vector3 worldCoords, string name)
+        {
+            data = new MarkerData();
+            setLatitude(worldCoords.z);
+            setLongitude(worldCoords.x);
+            if (worldCoords.y != float.MinValue)
+                setAltitude(worldCoords.y);
+            setMarkerText(name);
+
+            setRelativeGamePosition();
+            transform.Rotate(new Vector3(0, 180, 0)); // Rotate the prefab
+            transform.LookAt(new Vector3(0, -20, 0)); // Look at the camera
+        }
 
         public void setLongitude(float lon)
         {
             if (lon < -180)
-                worldCoords.x = lon + 360;
+                data.worldCoords.x = lon + 360;
             else if (lon > 180)
-                worldCoords.x = lon - 360;
+                data.worldCoords.x = lon - 360;
             else
-                worldCoords.x = lon;
+                data.worldCoords.x = lon;
+        }
+
+        public float getLongitude()
+        {
+            return data.worldCoords.x;
         }
 
         public void setLatitude(float lat)
         {
             if (lat < -90)
             {
-                worldCoords.z = -180 + System.Math.Abs(lat);
-                setLongitude(worldCoords.x - 180);
+                data.worldCoords.z = -180 + System.Math.Abs(lat);
+                setLongitude(data.worldCoords.x - 180);
             }
             else if (lat > 90)
             {
-                worldCoords.z = 180 - System.Math.Abs(lat);
-                setLongitude(worldCoords.x - 180);
+                data.worldCoords.z = 180 - System.Math.Abs(lat);
+                setLongitude(data.worldCoords.x - 180);
             }
             else
-                worldCoords.z = lat;
+                data.worldCoords.z = lat;
+        }
+
+        public float getLatitude()
+        {
+            return data.worldCoords.z;
         }
 
         public bool setAltitude(float alt)
         {
             if(alt < 10000 && alt > -1000)
             {
-                worldCoords.y = alt;
+                data.worldCoords.y = alt;
                 return true;
             }
             Debug.LogError("Wrong altitude, value "+alt+" is outside -1000 and 10000!");
             return false;
         }
 
-        private void setMarkerText(string content)
+        public int getAltitude()
         {
-            GetComponentInChildren<UnityEngine.UI.Text>().text = content;
+            return (int)data.worldCoords.y;
+        }
+
+        public void setMarkerText(string content)
+        {
+            data.text = content;
+        }
+
+
+        public string getMarkerText()
+        {
+            return data.text;
+        }
+
+        public void setMarkerDisplayText()
+        {
+            GetComponentInChildren<UnityEngine.UI.Text>().text = data.text + "\n" + data.getDistanceToUser();
         }
 
         public void setRelativeGamePosition()
         {
-            markerPosition = new Vector3();
+            data.markerPosition = new Vector3();
             if (GPSController.Instance.userLocationStable)
             {
-                markerPosition.x = -(-GPSController.Instance.userWorldLocation.x + worldCoords.x) * MarkerController.markerScale.x;
-                markerPosition.z = -(-GPSController.Instance.userWorldLocation.z + worldCoords.z) * MarkerController.markerScale.z;
-                if (worldCoords.y == float.MinValue)
-                    markerPosition.y = 0; // if no altitude information available, show marker at user altitude
+                data.markerPosition.x = -(-GPSController.Instance.userWorldLocation.x + data.worldCoords.x) * MarkerController.markerScale.x;
+                data.markerPosition.z = -(-GPSController.Instance.userWorldLocation.z + data.worldCoords.z) * MarkerController.markerScale.z;
+                if (data.worldCoords.y == float.MinValue)
+                    data.markerPosition.y = 0; // if no altitude information available, show marker at user altitude
                 else
-                    markerPosition.y = (-GPSController.Instance.userWorldLocation.y + worldCoords.y) * MarkerController.markerScale.y;
-                
-                setMarkerText(text + "\n" + getDistanceToUser());
+                    data.markerPosition.y = (-GPSController.Instance.userWorldLocation.y + data.worldCoords.y) * MarkerController.markerScale.y;
+
+                setMarkerDisplayText();
                 //Debug.Log("MARKER: " + text + " - worldLocation: " + worldCoords.ToString()+ " gamePosition: "
                 //    + markerPosition.ToString() + " game distance to user:" + Vector3.Distance(markerPosition, new Vector3(0,0,0)));
             }
             else
                 Debug.LogError("LONGITUDE/LATITUDE NOT SET, OR USER LOCATION UNKNOWN (YET?)");
 
-            transform.position = markerPosition;
+            transform.position = data.markerPosition;
         }
 
-        private void setDistanceToUser()
+        public MarkerData getMarkerData()
         {
-            float ML = (worldCoords.z + GPSController.Instance.userWorldLocation.z) / 2;
-            
-            float KPD_lat = (float)(111.13209 - 0.56605 * Math.Cos(2 * ML) + 0.0012 * Math.Cos(4 * ML));
-            float KPD_lon = (float)(111.41513 * Math.Cos(ML) - 0.09455 * Math.Cos(3 * ML) + 0.00012 * Math.Cos(5 * ML));
-            float NS = KPD_lat * (worldCoords.z - GPSController.Instance.userWorldLocation.z);
-            float EW = KPD_lon * (worldCoords.z - GPSController.Instance.userWorldLocation.z);
-            //Debug.Log("DIST = " + (float)Math.Sqrt(NS * NS + EW * EW) + "km");
-            distanceToUser = (float)Math.Sqrt(NS * NS + EW * EW) * 1000;
-        }
-
-        public string getDistanceToUser()
-        {
-            setDistanceToUser();
-            if (distanceToUser > 1000)
-                return (distanceToUser / 1000).ToString("0.0") + "km";
-            if (distanceToUser < 1000)
-                return ((Math.Round(distanceToUser/100, 0)*100)).ToString() + "m";
-            else
-                return distanceToUser.ToString("0") + "m";
+            return data;
         }
     }
 }
+
+// 740 -> 740/100 = 7.4 - > 7*100 = 700
+// 74 -> 74/10 = 7.4 -> 7*10 = 79

@@ -28,8 +28,8 @@ public class GoogleAltitudeController : MonoBehaviour
     {
         //Debug.Log("SENDING REST REQUEST");
         string url = "https://maps.googleapis.com/maps/api/elevation/json?locations="
-            + marker.GetComponent<Marker>().worldCoords.z.ToString()
-            + "," + marker.GetComponent<Marker>().worldCoords.x.ToString()
+            + marker.GetComponent<Marker>().getLatitude().ToString()
+            + "," + marker.GetComponent<Marker>().getLongitude().ToString()
             + "&key=" + googleApiKey;
         //Debug.Log("URL: " + url);
         WWW www = new WWW(url);
@@ -39,7 +39,7 @@ public class GoogleAltitudeController : MonoBehaviour
         if (string.IsNullOrEmpty(www.error))
         {
             //Debug.Log(www.text);
-            marker.GetComponent<Marker>().worldCoords.y = JSONDecodeGoogleElevation(www.text);
+            marker.GetComponent<Marker>().setAltitude(JSONDecodeGoogleElevation(www.text));
         }
         else
             Debug.Log(www.error);

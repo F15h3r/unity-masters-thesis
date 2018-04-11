@@ -10,23 +10,32 @@ public class MarkerController : MonoBehaviour {
     public GameObject markerPrefab, parentObject;
     private GameObject markerPrefabClone;
     private GoogleAltitudeController rsc;
-    private List<GameObject> markers;
-    private int framesToReload = 150;
+    public List<GameObject> markers;
+
+    public float refreshInterval = 15;
+    private float timeSinceLastRefresh = 10;
+
+    private void Awake()
+    {
+        Instance = this;
+        markerScale = new Vector3(15000, 1, 15000); // TODO: read from userPrefs
+        markers = new List<GameObject>();
+        rsc = gameObject.AddComponent(typeof(GoogleAltitudeController)) as GoogleAltitudeController;        
+    }
 
     private void Start()
     {
-        DontDestroyOnLoad(this);
-        markerScale = new Vector3(15000, 1, 15000); // TODO: read from userPrefs
-        markers = new List<GameObject>();
-        rsc = gameObject.AddComponent(typeof(GoogleAltitudeController)) as GoogleAltitudeController;
+        readMarkersFromMemory();
+    }
 
-        //showMarkerFromPrefab(new Vector3(100, 100, 100), "100, 100, 100");
-        //showMarkerFromPrefab(new Vector3(-100, -100, -100), "-100, -100, -100");
+    private void readMarkersFromMemory() // TODO: ACTUALLY READ MARKERS FROM MEMORY...
+    {
         Vector3 lisbonCenter = new Vector3();
         lisbonCenter.z = 38.713889f;
         lisbonCenter.x = -9.139444f;
         lisbonCenter.y = float.MinValue;
-        showMarker(lisbonCenter,  "Lisbon center");
+        showMarker(lisbonCenter, "Lisbon center");
+
 
         Vector3 lisbonAirport = new Vector3();
         lisbonAirport.z = 38.7755936f;
@@ -47,33 +56,28 @@ public class MarkerController : MonoBehaviour {
         isel.x = -9.1167117f;
         isel.y = float.MinValue;
         showMarker(isel, "ISEL");
-
     }
 
-    private void showMarker(Vector3 worldCoords, string markerText)
+    public void showMarker(Vector3 worldCoords, string markerText)
     {
         markerPrefabClone = 
             Instantiate(markerPrefab, transform.position, Quaternion.identity, parentObject.transform) as GameObject;
 
+        markerPrefabClone.GetComponent<Marker>().Setup(worldCoords, markerText);
+        if(worldCoords.y != float.MinValue)
+            StartCoroutine(rsc.setMarkerElevation(markerPrefabClone));
+
         markers.Add(markerPrefabClone);
-        markerPrefabClone.GetComponent<Marker>().setLatitude(worldCoords.z);
-        markerPrefabClone.GetComponent<Marker>().setLongitude(worldCoords.x);
-        markerPrefabClone.GetComponent<Marker>().text = markerText;
-
-        StartCoroutine(rsc.setMarkerElevation(markerPrefabClone));
-
-        markerPrefabClone.GetComponent<Marker>().setRelativeGamePosition();
-        markerPrefabClone.transform.Rotate(new Vector3(0, 180, 0)); // Rotate the prefab
-        markerPrefabClone.transform.LookAt(new Vector3(0, -20, 0)); // Look at the camera
-
-
     }
 
     void Update () {
-        if(framesToReload < 0)
+        timeSinceLastRefresh += Time.unscaledDeltaTime;
+
+        if(timeSinceLastRefresh >= refreshInterval)
         {
             //Debug.Log("UPDATE MARKERS");
-            framesToReload = 150;
+            timeSinceLastRefresh = 0;
+
             foreach(GameObject marker in markers)
             {
                 marker.GetComponent<Marker>().setRelativeGamePosition();
@@ -81,8 +85,5 @@ public class MarkerController : MonoBehaviour {
                 //Debug.Log(marker.GetComponent<Marker>().text + " ALT: " + marker.GetComponent<Marker>().worldCoords.y.ToString() + " GAME ALT: " + marker.GetComponent<Marker>().transform.position.y.ToString());
             }
         }
-        else
-            framesToReload--;
-
     }
 }

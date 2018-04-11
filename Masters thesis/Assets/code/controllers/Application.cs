@@ -8,9 +8,7 @@ public class Application : MonoBehaviour {
     private void Awake()
     {
         Screen.sleepTimeout = SleepTimeout.NeverSleep;
-        userGamePosition = new Vector3(0, 0, 0);
-        //RESTServiceController.Instance = gameObject.AddComponent(typeof(RESTServiceController)) as RESTServiceController;
-        //MarkerManager.Instance = gameObject.AddComponent(typeof(MarkerManager)) as MarkerManager;        
+        userGamePosition = new Vector3(0, 0, 0);     
     }
 
 }
