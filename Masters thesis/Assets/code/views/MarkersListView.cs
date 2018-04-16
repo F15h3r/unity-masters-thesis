@@ -8,15 +8,12 @@ public class MarkersListView : MonoBehaviour {
     public GameObject MarkersMenuCanvas;
 
     void Start () {
-        Debug.Log("start markersListView");
         MarkersMenuCanvas.SetActive(false);
 	}
 
     public void toggleMarkersMenu()
     {
-        Debug.Log("Toggle markersListView");
         isVisible = !isVisible;
         MarkersMenuCanvas.SetActive(isVisible);
-        
     }
 }

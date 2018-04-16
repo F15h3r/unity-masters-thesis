@@ -42,7 +42,7 @@ public class GPSController : MonoBehaviour {
     {
         if(!Input.location.isEnabledByUser)
         {
-            locationError("USER GAVE NO PERMISSION TO ACCESS GPS");
+            locationWarning("USER GAVE NO PERMISSION TO ACCESS GPS");
 
             yield break;
         }
@@ -57,14 +57,14 @@ public class GPSController : MonoBehaviour {
 
         if(maxAttempts <= 0)
         {
-            locationError("TIMED OUT: CAN'T DETERMINE LOCATION");
+            locationWarning("TIMED OUT: CAN'T DETERMINE LOCATION");
 
             yield break;
         }
 
         if(Input.location.status == LocationServiceStatus.Failed)
         {
-            locationError("UNKNOWN GPS ERROR");
+            locationWarning("UNKNOWN GPS ERROR");
 
             yield break;
         }
@@ -79,16 +79,16 @@ public class GPSController : MonoBehaviour {
         else
         {
             userLocationStable = false;
-            Debug.LogError("location NOT found! atempts: " + (20 - maxAttempts) + " current location reading = lat:"
+            Debug.LogWarning("location NOT found! atempts: " + (20 - maxAttempts) + " current location reading = lat:"
                 + Input.location.lastData.latitude +" lon:"+ Input.location.lastData.longitude);
         }
 
         yield break;
     }
 
-    private void locationError(string msg)
+    private void locationWarning(string msg)
     {
-        Debug.Log(msg);
+        Debug.LogWarning(msg);
         userLocationStable = false;
         userWorldLocation = new Vector3(float.MinValue, float.MinValue, float.MinValue);
     }

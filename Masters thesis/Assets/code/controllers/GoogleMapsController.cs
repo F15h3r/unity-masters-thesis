@@ -4,8 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class GoogleMapsController : MonoBehaviour {
+
     private string url;
-    LocationInfo li;
     public int zoom = 15;
     public int width = 640;
     public int height = 640;
