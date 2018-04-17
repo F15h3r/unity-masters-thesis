@@ -13,6 +13,7 @@ namespace Assets.code.models
         public Vector3 markerPosition;
         public float distanceToUser = 0;
         public string text;
+        public bool visible = true;
 
 
         private void setDistanceToUser()
