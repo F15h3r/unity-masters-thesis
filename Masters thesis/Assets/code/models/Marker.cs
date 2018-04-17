@@ -11,6 +11,32 @@ namespace Assets.code
     class Marker : MonoBehaviour
     {
         public MarkerData data;
+        /*
+        public Marker(float lat, float lon)
+        {
+            data.worldCoords = new Vector3();
+            data.worldCoords.y = float.MinValue;
+
+            setLongitude(lon);
+            setLatitude(lat);
+        }
+
+        public Marker(Vector3 worldCoords)
+        {
+            data.worldCoords = new Vector3();
+            worldCoords.y = float.MinValue;
+
+            setLongitude(worldCoords.x);
+            setLatitude(worldCoords.z);
+        }
+
+        public Marker(float lat, float lon, float alt)
+        {
+            setLongitude(lon);
+            setLatitude(lat);
+            setAltitude(alt);
+        }
+        */
 
         public void Setup(Vector3 worldCoords, string name)
         {

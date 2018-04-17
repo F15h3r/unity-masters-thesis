@@ -1,5 +1,4 @@
-﻿using Assets.code;
-using Assets.code.models;
+﻿using Assets.code.models;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,27 +15,45 @@ public class MarkersListController : MonoBehaviour {
 	
 	public void refreshDisplay()
     {
-        removeAllButtons();
+        removeButtons();
         addAllButtons();
-    }
-
-
-    private void addAllButtons()
-    {
-        foreach(GameObject marker in MarkerController.Instance.markers)
-            addMarkerButtonToList(marker.GetComponent<Marker>().data);
     }
 
     private void addMarkerButtonToList(MarkerData markerData)
     {
         markerButtonPrefabClone = Instantiate(markerButtonPrefab, transform) as GameObject;
-        markerButtonPrefabClone.transform.SetParent(transform, false);
-        markerButtonPrefabClone.GetComponent<MarkerButton>().Setup(markerData);
+        if (markerButtonPrefabClone != null)
+            markerButtonPrefabClone.GetComponent<MarkerButton>().Setup(markerData);
+        else
+            Debug.LogError("markerButtonPrefabClone = null!");
     }
 
-    private void removeAllButtons()
+    private void addAllButtons()
     {
-        TransformEx.Clear(transform);
+        foreach(GameObject marker in MarkerController.Instance.markers)
+            addMarkerButtonToList(marker.GetComponent<Assets.code.Marker>().getMarkerData());
+    }
+
+    private void removeButtons()
+    {
+
+        while(transform.childCount > 0)
+        {
+            Destroy(transform.GetChild(0).gameObject);
+        }
         
+    }
+
+    private void removeMarker(MarkerData marker) // TODO: MOGOČE PREMAKNI TOLE V MARKERcONTROLLER ??? iN OD TAM KLIČI SAMO REFRESHDISPLAY???
+    {
+        for(int i = MarkerController.Instance.markers.Count-1; i>=0;i--)
+        {
+            if(MarkerController.Instance.markers[i].GetComponent<MarkerData>().Equals(marker))
+            {
+                MarkerController.Instance.markers.RemoveAt(i);
+                refreshDisplay();
+                break;
+            }
+        }
     }
 }
