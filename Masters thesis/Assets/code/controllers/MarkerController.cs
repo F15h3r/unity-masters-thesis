@@ -41,18 +41,31 @@ public class MarkerController : MonoBehaviour {
             }
         }
     }
-    
-    internal void hideMarker(MarkerData markerData)
+
+    public void create3DMarkerInstance(Vector3 worldCoords, string markerName, string information, bool visible=true)
+    {
+
+        markerPrefabClone =
+            Instantiate(markerPrefab, transform.position, Quaternion.identity, parentObject.transform) as GameObject;
+
+        markerPrefabClone.GetComponent<Marker>().Setup(worldCoords, markerName);
+
+        if (worldCoords.y != float.MinValue)
+            StartCoroutine(rsc.setMarkerElevation(markerPrefabClone));
+
+        markerPrefabClone.SetActive(visible);
+        markerPrefabClone.GetComponent<Marker>().data.visible = visible;
+
+        markers.Add(markerPrefabClone);
+    }
+
+    public void set3DMarkerVisible(MarkerData markerData)
     {
         for (int i = markers.Count - 1; i >= 0; i--)
         {
-            Vector3 m = markers[i].GetComponent<Marker>().data.worldCoords;
-            if (m == markerData.worldCoords)
+            if (markers[i].GetComponent<Marker>().data == markerData)
             {
-                Debug.Log("Hidding marker: " + markerData.text);
-                markerData.visible = false;
-                markers[i].GetComponent<Marker>().gameObject.SetActive(false);
-
+                markers[i].GetComponent<Marker>().data.visible = true;
             }
         }
     }
@@ -63,14 +76,14 @@ public class MarkerController : MonoBehaviour {
         lisbonCenter.z = 38.713889f;
         lisbonCenter.x = -9.139444f;
         lisbonCenter.y = float.MinValue;
-        create3DMarkerInstance(lisbonCenter, "Lisbon center");
+        create3DMarkerInstance(lisbonCenter, "Lisbon center (ROSSIO)", "Famous Rossio square.");
 
 
         Vector3 lisbonAirport = new Vector3();
         lisbonAirport.z = 38.7755936f;
         lisbonAirport.x = -9.1268856f;
         lisbonAirport.y = float.MinValue;
-        create3DMarkerInstance(lisbonAirport, "Lisbon airport");
+        create3DMarkerInstance(lisbonAirport, "Lisbon airport", "Lisbon official airport offers great connectivity to other countries as well as the city center and surroundings.");
 
         // 38.7365463,-9.1552203 Gulbenkian
 
@@ -78,25 +91,13 @@ public class MarkerController : MonoBehaviour {
         gulbenkian.z = 38.7365463f;
         gulbenkian.x = -9.1552203f;
         gulbenkian.y = float.MinValue;
-        create3DMarkerInstance(gulbenkian, "Gulbenkian");
+        create3DMarkerInstance(gulbenkian, "Gulbenkian", "", false);
 
         Vector3 isel = new Vector3();
         isel.z = 38.7567672f;
         isel.x = -9.1167117f;
         isel.y = float.MinValue;
-        create3DMarkerInstance(isel, "ISEL");
-    }
-
-    public void create3DMarkerInstance(Vector3 worldCoords, string markerText)
-    {
-        markerPrefabClone =
-            Instantiate(markerPrefab, transform.position, Quaternion.identity, parentObject.transform) as GameObject;
-
-        markerPrefabClone.GetComponent<Marker>().Setup(worldCoords, markerText);
-        if (worldCoords.y != float.MinValue)
-            StartCoroutine(rsc.setMarkerElevation(markerPrefabClone));
-
-        markers.Add(markerPrefabClone);
+        create3DMarkerInstance(isel, "ISEL", "ISEL (Instituto Superior de Engenharia de Lisboa) resulted from the restructuring of an institution with a long-standing tradition in engineering teaching in Portugal, the Industrial Institute of Lisbon (Instituto Industrial de Lisboa), which was founded in 1852 by Royal Decree signed by Queen Maria II. In 1988 it became part of a network of Polytechnic Higher Education institutions, integrated in IPL - Polytechnic Institute of Lisbon (Instituto Politécnico de Lisboa).");
     }
 
     void Update () {

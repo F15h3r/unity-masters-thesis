@@ -5,11 +5,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MarkerButton : MonoBehaviour {
+public class AllMarkersListItem : MonoBehaviour {
     public Button deleteButton;
     public Button toggleVisible;
     public Text markerText;
-    public MarkerButton clickListenerScript;
+    public AllMarkersListItem clickListenerScript;
 
 
     private MarkerData markerData;
@@ -31,7 +31,7 @@ public class MarkerButton : MonoBehaviour {
     {
         MarkerController.Instance.remove3DMarkerInstance(markerData);
         Debug.Log("removed 3D marker prefab GameObject instance");
-        gameObject.GetComponentInParent<MarkersListController>().refreshDisplay();
+        MarkersListController.Instance.refreshAllMarkersList();
     }
 
     private void toggleVisibility()
@@ -39,8 +39,8 @@ public class MarkerButton : MonoBehaviour {
         Debug.Log("Hide click listener called");
         if(markerData.visible)
         {
-            MarkerController.Instance.hideMarker(markerData);
-            gameObject.GetComponentInParent<MarkersListController>().refreshDisplay();
+            //MarkerController.Instance.hideMarker(markerData);
+            gameObject.GetComponentInParent<MarkersListController>().refreshAllMarkersList();
 
         } // TODO: ENAKO ZA PRIKAZ...
 
