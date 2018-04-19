@@ -23,7 +23,7 @@ public class AllMarkersListItem : MonoBehaviour {
     {
         markerData = md;
 
-        markerText.text = markerData.text;
+        markerText.text = markerData.name;
         deleteButton.onClick.AddListener(removeClick);
     }
 

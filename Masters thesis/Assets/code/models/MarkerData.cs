@@ -12,7 +12,8 @@ namespace Assets.code.models
         public Vector3 worldCoords;
         public Vector3 markerPosition;
         public float distanceToUser = 0;
-        public string text;
+        public string name;
+        public string description;
         public bool visible = true;
 
 

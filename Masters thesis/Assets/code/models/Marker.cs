@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Assets.code
 {
@@ -12,16 +13,18 @@ namespace Assets.code
     {
         public MarkerData data;
 
-        public void Setup(Vector3 worldCoords, string name)
+        public void Setup(Vector3 worldCoords, string name, string info)
         {
             data = new MarkerData();
             setLatitude(worldCoords.z);
             setLongitude(worldCoords.x);
             if (worldCoords.y != float.MinValue)
                 setAltitude(worldCoords.y);
-            setMarkerText(name);
-
+            setMarkerName(name);
+            data.description = info;
             setRelativeGamePosition();
+            transform.gameObject.GetComponentInChildren<Button>().onClick.AddListener(
+                delegate { MarkerInfoPopUpController.Instance.showMarkerInfoPopup(data); }); // TODO: preveri to
             transform.Rotate(new Vector3(0, 180, 0)); // Rotate the prefab
             transform.LookAt(new Vector3(0, -20, 0)); // Look at the camera
         }
@@ -78,20 +81,20 @@ namespace Assets.code
             return (int)data.worldCoords.y;
         }
 
-        public void setMarkerText(string content)
+        public void setMarkerName(string content)
         {
-            data.text = content;
+            data.name = content;
         }
 
 
-        public string getMarkerText()
+        public string getMarkerName()
         {
-            return data.text;
+            return data.name;
         }
 
         public void setMarkerDisplayText()
         {
-            GetComponentInChildren<UnityEngine.UI.Text>().text = data.text + "\n" + data.getDistanceToUser();
+            GetComponentInChildren<UnityEngine.UI.Text>().text = data.name + "\n" + data.getDistanceToUser();
         }
 
         public void setRelativeGamePosition()

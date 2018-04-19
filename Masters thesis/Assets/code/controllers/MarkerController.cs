@@ -48,7 +48,7 @@ public class MarkerController : MonoBehaviour {
         markerPrefabClone =
             Instantiate(markerPrefab, transform.position, Quaternion.identity, parentObject.transform) as GameObject;
 
-        markerPrefabClone.GetComponent<Marker>().Setup(worldCoords, markerName);
+        markerPrefabClone.GetComponent<Marker>().Setup(worldCoords, markerName, information);
 
         if (worldCoords.y != float.MinValue)
             StartCoroutine(rsc.setMarkerElevation(markerPrefabClone));
