@@ -11,25 +11,34 @@ public class MarkersListController : MonoBehaviour {
     public GameObject markerButtonPrefab;
     private GameObject markerButtonPrefabClone;
 
-    public static bool markersListVisible = false;
+    public bool isDisplayed = false;
     public GameObject MarkersMenuCanvas;
 
     // Use this for initialization
     void Start () {
         Instance = this;
-
-        MarkersMenuCanvas.SetActive(false);
+        MarkersMenuCanvas.SetActive(isDisplayed);
     }
 
 
     public void toggleMarkersMenu()
     {
-        markersListVisible = !markersListVisible;
+        MarkerInfoPopUpController.Instance.closeMarkerInfoPopup();
 
-        if (markersListVisible)
+        isDisplayed = !isDisplayed;
+
+        if (isDisplayed)
             refreshAllMarkersList();
-        MarkersMenuCanvas.SetActive(markersListVisible);
+        MarkersMenuCanvas.SetActive(isDisplayed);
+    }
 
+    public void closeMarkersMenu()
+    {
+        if (isDisplayed)
+        {
+            isDisplayed = false;
+            MarkersMenuCanvas.SetActive(isDisplayed);
+        }
     }
 
 

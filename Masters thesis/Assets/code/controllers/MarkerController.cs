@@ -59,6 +59,11 @@ public class MarkerController : MonoBehaviour {
         markers.Add(markerPrefabClone);
     }
 
+    public void load3DMarkerFromMarkerData(MarkerData markerData)
+    {
+        create3DMarkerInstance(markerData.worldCoords, markerData.name, markerData.description, markerData.visible);
+    }
+
     public void set3DMarkerVisible(MarkerData markerData)
     {
         for (int i = markers.Count - 1; i >= 0; i--)
@@ -91,7 +96,7 @@ public class MarkerController : MonoBehaviour {
         gulbenkian.z = 38.7365463f;
         gulbenkian.x = -9.1552203f;
         gulbenkian.y = float.MinValue;
-        create3DMarkerInstance(gulbenkian, "Gulbenkian", "", false);
+        create3DMarkerInstance(gulbenkian, "Gulbenkian", "", false); // currently hidden
 
         Vector3 isel = new Vector3();
         isel.z = 38.7567672f;

@@ -22,6 +22,7 @@ namespace Assets.code
                 setAltitude(worldCoords.y);
             setMarkerName(name);
             data.description = info;
+            data.dateTimeAdded = DateTime.Now;
             setRelativeGamePosition();
             transform.gameObject.GetComponentInChildren<Button>().onClick.AddListener(
                 delegate { MarkerInfoPopUpController.Instance.showMarkerInfoPopup(data); }); // TODO: preveri to

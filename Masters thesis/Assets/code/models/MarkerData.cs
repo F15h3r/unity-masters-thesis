@@ -14,6 +14,7 @@ namespace Assets.code.models
         public float distanceToUser = 0;
         public string name;
         public string description;
+        public DateTime dateTimeAdded;
         public bool visible = true;
 
 
