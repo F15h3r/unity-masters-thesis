@@ -25,7 +25,7 @@ public class MarkerInfoPopUpController : MonoBehaviour {
         popUp.GetComponentInChildren<Text>().text = md.name;
         popUp.transform.FindChild("markerLatLon").GetComponent<Text>().text
             = "Lat: " + md.worldCoords.z + ", Lon: " + md.worldCoords.x;
-        popUp.transform.FindChild("markerDate").GetComponent<Text>().text = markerData.dateTimeAdded.Date.ToString();
+        popUp.transform.FindChild("markerDate").GetComponent<Text>().text = markerData.dateAdded;
         popupMarkerInfoText.GetComponent<Text>().text = md.description;
         popUp.transform.FindChild("closeButton").GetComponent<Button>().onClick.AddListener(MarkerInfoPopUpController.Instance.closeMarkerInfoPopup);
         popUp.transform.FindChild("removeButton").GetComponent<Button>().onClick.AddListener(MarkerInfoPopUpController.Instance.removeMarkerInstance);

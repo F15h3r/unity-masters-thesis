@@ -13,7 +13,7 @@ namespace Assets.code
     {
         public MarkerData data;
 
-        public void Setup(Vector3 worldCoords, string name, string info)
+        public void Setup(Vector3 worldCoords, string name, string description)
         {
             data = new MarkerData();
             setLatitude(worldCoords.z);
@@ -21,11 +21,19 @@ namespace Assets.code
             if (worldCoords.y != float.MinValue)
                 setAltitude(worldCoords.y);
             setMarkerName(name);
-            data.description = info;
-            data.dateTimeAdded = DateTime.Now;
+            data.description = description;
+            data.dateAdded = DateTime.Now.ToString("dd.MM.yyyy, H:mm");
             setRelativeGamePosition();
             transform.gameObject.GetComponentInChildren<Button>().onClick.AddListener(
-                delegate { MarkerInfoPopUpController.Instance.showMarkerInfoPopup(data); }); // TODO: preveri to
+                delegate { MarkerInfoPopUpController.Instance.showMarkerInfoPopup(data); });
+            transform.Rotate(new Vector3(0, 180, 0)); // Rotate the prefab
+            transform.LookAt(new Vector3(0, -20, 0)); // Look at the camera
+        }
+
+        public void loadFromMarkerData(MarkerData md)
+        {
+            data = md;
+            setRelativeGamePosition();
             transform.Rotate(new Vector3(0, 180, 0)); // Rotate the prefab
             transform.LookAt(new Vector3(0, -20, 0)); // Look at the camera
         }
@@ -126,6 +134,3 @@ namespace Assets.code
         }
     }
 }
-
-// 740 -> 740/100 = 7.4 - > 7*100 = 700
-// 74 -> 74/10 = 7.4 -> 7*10 = 79

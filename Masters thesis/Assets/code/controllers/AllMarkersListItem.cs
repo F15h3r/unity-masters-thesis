@@ -30,7 +30,6 @@ public class AllMarkersListItem : MonoBehaviour {
     public void removeClick()
     {
         MarkerController.Instance.remove3DMarkerInstance(markerData);
-        Debug.Log("removed 3D marker prefab GameObject instance");
         MarkersListController.Instance.refreshAllMarkersList();
     }
 

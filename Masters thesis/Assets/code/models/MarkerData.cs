@@ -7,6 +7,7 @@ using UnityEngine;
 
 namespace Assets.code.models
 {
+    [System.Serializable]
     public class MarkerData
     {
         public Vector3 worldCoords;
@@ -14,7 +15,7 @@ namespace Assets.code.models
         public float distanceToUser = 0;
         public string name;
         public string description;
-        public DateTime dateTimeAdded;
+        public string dateAdded;
         public bool visible = true;
 
 
