@@ -28,16 +28,18 @@ public class MarkerController : MonoBehaviour {
     private void Start()
     {
         readMarkersFromMemory();
+        //addDummyMarkers();
     }
 
-    internal void remove3DMarkerInstance(MarkerData markerData)
+    internal void remove3DMarkerInstance(MarkerData markerData, bool removeFromMarkersList = true)
     {
         for (int i = markers.Count - 1; i >= 0; i--)
         {
             if(markers[i].GetComponent<Marker>().data == markerData)
             {
                 DestroyObject(markers[i].gameObject);
-                markers.RemoveAt(i);
+                if(removeFromMarkersList)
+                    markers.RemoveAt(i);
             }
         }
     }
@@ -56,6 +58,26 @@ public class MarkerController : MonoBehaviour {
         markers.Add(markerPrefabClone);
     }
 
+    public void add3DMarkerInstance(MarkerData markerData, bool addToList = false)
+    {
+
+        markerPrefabClone =
+            Instantiate(markerPrefab, transform.position, Quaternion.identity, parentObject.transform) as GameObject;
+
+        markerPrefabClone.GetComponent<Marker>().Setup(markerData.worldCoords, markerData.name, markerData.description);
+
+        if (markerData.worldCoords.y == float.MinValue)
+            StartCoroutine(rsc.setMarkerElevation(markerPrefabClone));
+
+        update3DMarkers();
+        if(addToList)
+            markers.Add(markerPrefabClone);
+        else
+        {
+
+        }
+    }
+
     public void load3DMarkerInstance(MarkerData markerData)
     {
         markerPrefabClone = 
@@ -69,16 +91,18 @@ public class MarkerController : MonoBehaviour {
         markers.Add(markerPrefabClone);
     }
 
-    public void set3DMarkerVisible(MarkerData markerData)
+    
+    public void update3DMarkerVisibility(MarkerData markerData)
     {
         for (int i = markers.Count - 1; i >= 0; i--)
         {
             if (markers[i].GetComponent<Marker>().data == markerData)
             {
-                markers[i].GetComponent<Marker>().data.visible = true;
+                markers[i].gameObject.SetActive(markerData.visible);
             }
         }
     }
+    
 
     void Update () {
         timeSinceLastRefresh += Time.unscaledDeltaTime;

@@ -25,6 +25,7 @@ public class AllMarkersListItem : MonoBehaviour {
 
         markerText.text = markerData.name;
         deleteButton.onClick.AddListener(removeClick);
+        toggleVisible.onClick.AddListener(toggleVisibility);
     }
 
     public void removeClick()
@@ -35,14 +36,19 @@ public class AllMarkersListItem : MonoBehaviour {
 
     private void toggleVisibility()
     {
-        Debug.Log("Hide click listener called");
+        markerData.visible = !markerData.visible;
+
         if(markerData.visible)
         {
-            //MarkerController.Instance.hideMarker(markerData);
-            gameObject.GetComponentInParent<MarkersListController>().refreshAllMarkersList();
+            toggleVisible.gameObject.GetComponent<Text>().text = "Hide";
+        }
+        else
+        {
+            toggleVisible.gameObject.GetComponent<Text>().text = "Show";
+        }
 
-        } // TODO: ENAKO ZA PRIKAZ...
+        MarkerController.Instance.update3DMarkerVisibility(markerData);
 
-
+        gameObject.GetComponentInParent<MarkersListController>().refreshAllMarkersList();
     }
 }

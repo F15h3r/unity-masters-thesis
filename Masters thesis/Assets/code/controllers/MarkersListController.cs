@@ -37,7 +37,7 @@ public class MarkersListController : MonoBehaviour {
         if (isDisplayed)
         {
             isDisplayed = false;
-            MarkersMenuCanvas.SetActive(isDisplayed);
+            MarkersMenuCanvas.SetActive(false);
         }
     }
 
@@ -64,7 +64,6 @@ public class MarkersListController : MonoBehaviour {
 
     private void removeAllMarkersMenuItems()
     {
-        //TransformEx.Clear(transform);
         for(int i = markerButtonInstanceParent.transform.childCount - 1; i >= 0; i--)
             Destroy(markerButtonInstanceParent.transform.GetChild(i).gameObject);
     }

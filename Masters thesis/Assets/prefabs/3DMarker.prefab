@@ -164,6 +164,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6518b12a94cbab34383a0ea28e8dd370, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  data:
+    worldCoords: {x: 0, y: 0, z: 0}
+    markerPosition: {x: 0, y: 0, z: 0}
+    distanceToUser: 0
+    name: 
+    description: 
+    dateAdded: 
+    visible: 1
 --- !u!114 &114917331778719634
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -304,8 +312,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 950, y: 0}
-  m_SizeDelta: {x: 200, y: 404}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 200, y: 280}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224471406040892958
 RectTransform:

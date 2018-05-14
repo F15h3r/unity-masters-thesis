@@ -15,6 +15,7 @@ namespace Assets.code
 
         public void Setup(Vector3 worldCoords, string name, string description)
         {
+            print("Marker  setup for " + name);
             data = new MarkerData();
             setLatitude(worldCoords.z);
             setLongitude(worldCoords.x);
@@ -23,17 +24,22 @@ namespace Assets.code
             setMarkerName(name);
             data.description = description;
             data.dateAdded = DateTime.Now.ToString("dd.MM.yyyy, H:mm");
-            setRelativeGamePosition();
+
             transform.gameObject.GetComponentInChildren<Button>().onClick.AddListener(
                 delegate { MarkerInfoPopUpController.Instance.showMarkerInfoPopup(data); });
             transform.Rotate(new Vector3(0, 180, 0)); // Rotate the prefab
-            transform.LookAt(new Vector3(0, -20, 0)); // Look at the camera
+            transform.LookAt(new Vector3(0, -10, 0)); // Look at the camera
+
+            setRelativeGamePosition();
+            print("Marker " + name + " set up correctly");
         }
 
         public void loadFromMarkerData(MarkerData md)
         {
             data = md;
             setRelativeGamePosition();
+            transform.gameObject.GetComponentInChildren<Button>().onClick.AddListener(
+                delegate { MarkerInfoPopUpController.Instance.showMarkerInfoPopup(data); });
             transform.Rotate(new Vector3(0, 180, 0)); // Rotate the prefab
             transform.LookAt(new Vector3(0, -20, 0)); // Look at the camera
         }
