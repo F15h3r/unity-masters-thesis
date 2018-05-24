@@ -192,7 +192,7 @@ public class MarkerController : MonoBehaviour {
     }
 
     // TODO: REMOVE THIS
-    private void addDummyMarkers()
+    public void addDummyMarkers()
     {
         
         Vector3 lisbonCenter = new Vector3();

@@ -19,8 +19,8 @@ public class MarkerInfoPopUpController : MonoBehaviour {
 
     public void showMarkerInfoPopup(MarkerData markerData)
     {
-        print("SHOWMARKERINFOPOPUP CALLED!");
         MarkersListController.Instance.closeMarkersMenu();
+        MarkerAddPopupController.Instance.closeMarkerAddPopup();
         
         md = markerData;
         popUp.GetComponentInChildren<Text>().text = md.name;

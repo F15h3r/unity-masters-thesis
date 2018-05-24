@@ -24,6 +24,11 @@ public class AllMarkersListItem : MonoBehaviour {
         markerData = md;
 
         markerText.text = markerData.name;
+        if (md.visible)
+            toggleVisible.gameObject.GetComponent<Text>().text = "Hide";
+        else
+            toggleVisible.gameObject.GetComponent<Text>().text = "Show";
+
         deleteButton.onClick.AddListener(removeClick);
         toggleVisible.onClick.AddListener(toggleVisibility);
     }
