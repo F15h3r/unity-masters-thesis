@@ -44,9 +44,9 @@ namespace Assets.code.models
             if (distanceToUser > 1000)
                 return (distanceToUser / 1000).ToString("0.0") + "km";
             if (distanceToUser < 1000 && distanceToUser >= 100)
-                return ((Math.Round(distanceToUser / 100, 0) * 100)).ToString() + "m";
-            if (distanceToUser < 100)
                 return ((Math.Round(distanceToUser / 10, 0) * 10)).ToString() + "m";
+            if (distanceToUser < 100)
+                return ((Math.Round(distanceToUser, 0))).ToString() + "m";
             else
                 return distanceToUser.ToString("0") + "m";
         }

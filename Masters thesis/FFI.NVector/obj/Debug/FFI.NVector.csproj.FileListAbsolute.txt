@@ -3,3 +3,8 @@ D:\Dropbox\Fax\Magistrsko delo\literatura\n_vector_library_Cs-bugfix-8-11-2017\F
 D:\Dropbox\Fax\Magistrsko delo\literatura\n_vector_library_Cs-bugfix-8-11-2017\FFI.NVector\obj\Debug\FFI.NVector.csprojResolveAssemblyReference.cache
 D:\Dropbox\Fax\Magistrsko delo\literatura\n_vector_library_Cs-bugfix-8-11-2017\FFI.NVector\obj\Debug\FFI.NVector.dll
 D:\Dropbox\Fax\Magistrsko delo\literatura\n_vector_library_Cs-bugfix-8-11-2017\FFI.NVector\obj\Debug\FFI.NVector.pdb
+D:\Documents\GitHub\unity-masters-thesis\Masters thesis\FFI.NVector\bin\Debug\FFI.NVector.dll
+D:\Documents\GitHub\unity-masters-thesis\Masters thesis\FFI.NVector\bin\Debug\FFI.NVector.pdb
+D:\Documents\GitHub\unity-masters-thesis\Masters thesis\FFI.NVector\obj\Debug\FFI.NVector.csprojResolveAssemblyReference.cache
+D:\Documents\GitHub\unity-masters-thesis\Masters thesis\FFI.NVector\obj\Debug\FFI.NVector.dll
+D:\Documents\GitHub\unity-masters-thesis\Masters thesis\FFI.NVector\obj\Debug\FFI.NVector.pdb

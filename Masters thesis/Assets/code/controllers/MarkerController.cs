@@ -6,7 +6,7 @@ using System;
 
 public class MarkerController : MonoBehaviour {
     public static MarkerController Instance { get; set; }
-    public static Vector3 markerScale;
+    public Vector3 markerScale;
     public GameObject markerPrefab, parentObject;
     private GameObject markerPrefabClone;
     private GoogleAltitudeController rsc;
@@ -14,13 +14,13 @@ public class MarkerController : MonoBehaviour {
     public List<GameObject> markers;
 
 
-    public float refreshInterval = 1;
+    public float refreshInterval = 0.1f;
     private float timeSinceLastRefresh = 0;
 
     private void Awake()
     {
         Instance = this;
-        markerScale = new Vector3(20000, 0.5f, 20000); // TODO: read from userPrefs & pitch to zoom!
+        markerScale = new Vector3(10000, 0.5f, 10000); // TODO: read from userPrefs & pitch to zoom!
         markers = new List<GameObject>();
         rsc = gameObject.AddComponent(typeof(GoogleAltitudeController)) as GoogleAltitudeController;
     }
@@ -38,8 +38,11 @@ public class MarkerController : MonoBehaviour {
         {
             timeSinceLastRefresh = 0;
 
-            update3DMarkers();
+            
         }
+
+        update3DMarkers();
+
     }
 
     private void update3DMarkers()
