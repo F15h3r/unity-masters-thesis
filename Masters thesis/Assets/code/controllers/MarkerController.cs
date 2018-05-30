@@ -20,7 +20,7 @@ public class MarkerController : MonoBehaviour {
     private void Awake()
     {
         Instance = this;
-        markerScale = new Vector3(20000, 0.5f, 20000); // TODO: read from userPrefs
+        markerScale = new Vector3(20000, 0.5f, 20000); // TODO: read from userPrefs & pitch to zoom!
         markers = new List<GameObject>();
         rsc = gameObject.AddComponent(typeof(GoogleAltitudeController)) as GoogleAltitudeController;
     }

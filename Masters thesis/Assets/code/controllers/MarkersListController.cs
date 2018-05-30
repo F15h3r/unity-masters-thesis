@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class MarkersListController : MonoBehaviour {
-    public static MarkersListController Instance { set; get; }
+    public static MarkersListController Instance { get; set; }
     public GameObject markerButtonInstanceParent;
     public GameObject markerButtonPrefab;
     private GameObject markerButtonPrefabClone;

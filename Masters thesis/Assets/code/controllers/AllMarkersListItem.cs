@@ -45,13 +45,9 @@ public class AllMarkersListItem : MonoBehaviour {
         markerData.visible = !markerData.visible;
 
         if(markerData.visible)
-        {
             toggleVisible.gameObject.GetComponent<Text>().text = "Hide";
-        }
         else
-        {
             toggleVisible.gameObject.GetComponent<Text>().text = "Show";
-        }
 
         MarkerController.Instance.update3DMarkerVisibility(markerData);
 

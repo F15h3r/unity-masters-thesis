@@ -17,12 +17,12 @@ public class GoogleMapsController : MonoBehaviour {
     private int scale = 2; // scale 2 makes returning images 1280x1280
 
     public RawImage image;
-    //private string mapStyle = "&maptype=roadmap&style=feature:administrative.land_parcel%7Cvisibility:off&style=feature:administrative.neighborhood%7Cvisibility:off&style=feature:poi.business%7Cvisibility:off&style=feature:poi.park%7Celement:labels.text%7Cvisibility:off&style=feature:road%7Celement:labels%7Cvisibility:off&style=feature:water%7Celement:labels.text%7Cvisibility:off";
-    private string mapStyle = "&maptype=roadmap"; // TODO: PREKLOPI NA ZGORNJEGA KO MARKERJI DELUJEJO
+    private string mapStyle = "&style=feature:administrative.land_parcel%7Cvisibility:off&style=feature:administrative.neighborhood%7Cvisibility:off&style=feature:poi.business%7Cvisibility:off&style=feature:poi.park%7Celement:labels.text%7Cvisibility:off&style=feature:road%7Celement:labels%7Cvisibility:off&style=feature:water%7Celement:labels.text%7Cvisibility:off";
+    //private string mapStyle = "&maptype=roadmap"; // TODO: PREKLOPI NA ZGORNJEGA KO MARKERJI DELUJEJO
     private static string googleApiKey = "AIzaSyApdbgfaSwua1iDr0dsAl3v4I6ZJ4Emc9c";
 
     public float refreshInterval = 15;
-    private float timeSinceLastRefresh = 10;
+    private float timeSinceLastRefresh = 8;
 
     IEnumerator getMap()
     {
@@ -38,7 +38,7 @@ public class GoogleMapsController : MonoBehaviour {
             + "&maptype=" + selectedMapType
             + "&key=" + googleApiKey
             + mapStyle;
-            //+"&markers=color:blue%7Clabel:S%7C"+GPSController.Instance.userWorldLocation.z+","+ GPSController.Instance.userWorldLocation.x; //&markers=color:green%7Clabel:G%7C40.711614,-74.012318&markers=color:red%7Clabel:C%7C40.718217,-73.998284&key=YourAPIKeyWillbeHere";
+
         foreach(GameObject go in MarkerController.Instance.markers)
         {
             if(go.GetComponent<Marker>().data.visible)
