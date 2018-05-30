@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MarklessAR : MonoBehaviour {
+public class ARController : MonoBehaviour {
     private Gyroscope gyroscope;
     private GameObject cameraContainer;
     private Quaternion rotation;

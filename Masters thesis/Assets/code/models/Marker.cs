@@ -109,7 +109,8 @@ namespace Assets.code
 
         public void setMarkerDisplayText()
         {
-            GetComponentInChildren<UnityEngine.UI.Text>().text = data.name + "\n" + data.getDistanceToUser();
+            GetComponentInChildren<UnityEngine.UI.Text>().text = data.name + "\n"
+                + data.getDistanceToUser();// + "\n" + Vector3.Distance(data.markerPosition, Application.userGamePosition);
         }
 
         public void setRelativeGamePosition()
@@ -120,7 +121,7 @@ namespace Assets.code
                 data.markerPosition.x = -(-GPSController.Instance.userWorldLocation.x + data.worldCoords.x) * MarkerController.markerScale.x;
                 data.markerPosition.z = -(-GPSController.Instance.userWorldLocation.z + data.worldCoords.z) * MarkerController.markerScale.z;
                 if (data.worldCoords.y == float.MinValue)
-                    data.markerPosition.y = 0; // if no altitude information available, show marker at user altitude
+                    data.markerPosition.y = 0; // if no altitude information available, show marker at user altitude (0 on Y axis)
                 else
                     data.markerPosition.y = (-GPSController.Instance.userWorldLocation.y + data.worldCoords.y) * MarkerController.markerScale.y;
 
@@ -132,6 +133,9 @@ namespace Assets.code
                 Debug.LogError("LONGITUDE/LATITUDE NOT SET, OR USER LOCATION UNKNOWN (YET?)");
 
             transform.position = data.markerPosition;
+            //float scaleFactor = Vector3.Distance(data.markerPosition, Application.userGamePosition) / 200;
+            //if(Vector3.Distance(data.markerPosition, Application.userGamePosition) < 100)
+            //    transform.localScale = new Vector3(scaleFactor, scaleFactor, scaleFactor);
         }
 
         public MarkerData getMarkerData()

@@ -1,0 +1,5 @@
+D:\Dropbox\Fax\Magistrsko delo\literatura\n_vector_library_Cs-bugfix-8-11-2017\FFI.NVector\bin\Debug\FFI.NVector.dll
+D:\Dropbox\Fax\Magistrsko delo\literatura\n_vector_library_Cs-bugfix-8-11-2017\FFI.NVector\bin\Debug\FFI.NVector.pdb
+D:\Dropbox\Fax\Magistrsko delo\literatura\n_vector_library_Cs-bugfix-8-11-2017\FFI.NVector\obj\Debug\FFI.NVector.csprojResolveAssemblyReference.cache
+D:\Dropbox\Fax\Magistrsko delo\literatura\n_vector_library_Cs-bugfix-8-11-2017\FFI.NVector\obj\Debug\FFI.NVector.dll
+D:\Dropbox\Fax\Magistrsko delo\literatura\n_vector_library_Cs-bugfix-8-11-2017\FFI.NVector\obj\Debug\FFI.NVector.pdb

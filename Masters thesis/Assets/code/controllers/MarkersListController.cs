@@ -24,6 +24,7 @@ public class MarkersListController : MonoBehaviour {
     public void toggleMarkersMenu()
     {
         MarkerInfoPopUpController.Instance.closeMarkerInfoPopup();
+        MarkerAddPopupController.Instance.closeMarkerAddPopup();
 
         isDisplayed = !isDisplayed;
 

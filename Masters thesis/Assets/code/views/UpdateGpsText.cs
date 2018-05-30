@@ -21,7 +21,7 @@ public class UpdateGpsText : MonoBehaviour {
               "LAT: " + GPSController.Instance.userWorldLocation.z + "\n"
             + "LON: " + GPSController.Instance.userWorldLocation.x + "\n"
             + "ALT: " + GPSController.Instance.userWorldLocation.y + "\n" 
-            + "ORIENT: " + MarklessAR.deviceOrientation.ToString() + "\n"
+            + "ORIENT: " + ARController.deviceOrientation.ToString() + "\n"
             + "FPS: " + FPS;
     }
 

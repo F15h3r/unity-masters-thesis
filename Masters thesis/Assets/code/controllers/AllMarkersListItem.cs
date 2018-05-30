@@ -37,6 +37,7 @@ public class AllMarkersListItem : MonoBehaviour {
     {
         MarkerController.Instance.remove3DMarkerInstance(markerData);
         MarkersListController.Instance.refreshAllMarkersList();
+        GoogleMapsController.Instance.reloadMapImage();
     }
 
     private void toggleVisibility()
@@ -55,5 +56,6 @@ public class AllMarkersListItem : MonoBehaviour {
         MarkerController.Instance.update3DMarkerVisibility(markerData);
 
         gameObject.GetComponentInParent<MarkersListController>().refreshAllMarkersList();
+        GoogleMapsController.Instance.reloadMapImage();
     }
 }

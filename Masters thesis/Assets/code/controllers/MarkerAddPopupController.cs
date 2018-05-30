@@ -32,7 +32,9 @@ public class MarkerAddPopupController : MonoBehaviour {
         {
             lonText.text = GPSController.Instance.userWorldLocation.x.ToString();
             latText.text = GPSController.Instance.userWorldLocation.z.ToString();
-            
+
+            nameText.Select();
+            nameText.ActivateInputField();
         }
 
         popUp.SetActive(isDisplayed);
@@ -53,6 +55,8 @@ public class MarkerAddPopupController : MonoBehaviour {
             worldLocation.y = 0; // TODO: SPREMENI NA UPORABNIKOVO POLJE
 
         MarkerController.Instance.add3DMarkerInstance(worldLocation, nameText.text, descriptionText.text);
+        Instance.closeMarkerAddPopup();
+        GoogleMapsController.Instance.reloadMapImage();
     }
 
 }
