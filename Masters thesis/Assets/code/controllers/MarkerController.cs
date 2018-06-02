@@ -6,7 +6,7 @@ using System;
 
 public class MarkerController : MonoBehaviour {
     public static MarkerController Instance { get; set; }
-    public Vector3 markerScale;
+    public Vector3 unityWorldRatio;
     public GameObject markerPrefab, parentObject;
     private GameObject markerPrefabClone;
     private GoogleAltitudeController rsc;
@@ -20,7 +20,7 @@ public class MarkerController : MonoBehaviour {
     private void Awake()
     {
         Instance = this;
-        markerScale = new Vector3(10000, 0.5f, 10000); // TODO: read from userPrefs & pitch to zoom!
+        unityWorldRatio = new Vector3(0.1f, 0.1f, 0.1f);
         markers = new List<GameObject>();
         rsc = gameObject.AddComponent(typeof(GoogleAltitudeController)) as GoogleAltitudeController;
     }
@@ -52,7 +52,7 @@ public class MarkerController : MonoBehaviour {
             if (marker.GetComponent<Marker>().data.visible)
             {
                 marker.GetComponent<Marker>().setRelativeGamePosition();
-                marker.transform.LookAt(new Vector3(0, -1, 0));
+                marker.transform.LookAt(Application.userGamePosition);
             }
         }
     }
@@ -85,40 +85,6 @@ public class MarkerController : MonoBehaviour {
 
         markers.Add(markerPrefabClone);
     }
-
-    public void add3DMarkerInstance(MarkerData markerData, bool addToList = false)
-    {
-
-        markerPrefabClone =
-            Instantiate(markerPrefab, transform.position, Quaternion.identity, parentObject.transform) as GameObject;
-
-        markerPrefabClone.GetComponent<Marker>().Setup(markerData.worldCoords, markerData.name, markerData.description);
-
-        if (markerData.worldCoords.y == float.MinValue)
-            StartCoroutine(rsc.setMarkerElevation(markerPrefabClone));
-
-        update3DMarkers();
-        if(addToList)
-            markers.Add(markerPrefabClone);
-        else
-        {
-
-        }
-    }
-
-    public void load3DMarkerInstance(MarkerData markerData)
-    {
-        markerPrefabClone = 
-            Instantiate(markerPrefab, transform.position, Quaternion.identity, parentObject.transform) as GameObject;
-        markerPrefabClone.GetComponent<Marker>().loadFromMarkerData(markerData);
-
-        if (markerData.worldCoords.y == float.MinValue)
-            StartCoroutine(rsc.setMarkerElevation(markerPrefabClone));
-
-        markerPrefabClone.SetActive(markerData.visible);
-        markers.Add(markerPrefabClone);
-    }
-
     
     public void update3DMarkerVisibility(MarkerData markerData)
     {
@@ -162,6 +128,19 @@ public class MarkerController : MonoBehaviour {
         {
             Debug.LogError("Markers data playerPrefs doesn't exist!");
         }
+    }
+
+    public void load3DMarkerInstance(MarkerData markerData)
+    {
+        markerPrefabClone =
+            Instantiate(markerPrefab, transform.position, Quaternion.identity, parentObject.transform) as GameObject;
+        markerPrefabClone.GetComponent<Marker>().loadFromMarkerData(markerData);
+
+        if (markerData.worldCoords.y == float.MinValue)
+            StartCoroutine(rsc.setMarkerElevation(markerPrefabClone));
+
+        markerPrefabClone.SetActive(markerData.visible);
+        markers.Add(markerPrefabClone);
     }
 
     private string serializeMarkers()

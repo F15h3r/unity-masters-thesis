@@ -32,6 +32,8 @@ public class MarkerAddPopupController : MonoBehaviour {
         {
             lonText.text = GPSController.Instance.userWorldLocation.x.ToString();
             latText.text = GPSController.Instance.userWorldLocation.z.ToString();
+            nameText.text = "";
+            descriptionText.text = "";
 
             nameText.Select();
             nameText.ActivateInputField();

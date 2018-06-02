@@ -9,11 +9,6 @@ public class PitchToZoomDetector : MonoBehaviour {
     {
         Instance = this;
     }
-
-	// Use this for initialization
-	void Start () {
-		
-	}
 	
 	// Update is called once per frame
 	void Update () {
@@ -35,9 +30,10 @@ public class PitchToZoomDetector : MonoBehaviour {
             // Find the difference in the distances between each frame.
             float deltaMagnitudeDiff = (prevTouchDeltaMag - touchDeltaMag)*100;
 
-            Debug.Log("Zooming: " + deltaMagnitudeDiff);
-            MarkerController.Instance.markerScale.x += deltaMagnitudeDiff;
-            MarkerController.Instance.markerScale.z += deltaMagnitudeDiff;
+            foreach(GameObject marker in MarkerController.Instance.markers)
+            {
+                marker.transform.localScale = marker.transform.localScale * (1-deltaMagnitudeDiff/10000);
+            }
         }
     }
 }

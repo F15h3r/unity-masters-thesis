@@ -101,7 +101,6 @@ namespace Assets.code
             data.name = content;
         }
 
-
         public string getMarkerName()
         {
             return data.name;
@@ -110,22 +109,35 @@ namespace Assets.code
         public void setMarkerDisplayText()
         {
             GetComponentInChildren<UnityEngine.UI.Text>().text = data.name + "\n"
-                + data.getDistanceToUser() + "\nV3 dst:" + Vector3.Distance(data.markerPosition, Application.userGamePosition);
+                + data.getDistanceToUserString();
         }
 
         public void setRelativeGamePosition()
         {
             data.markerPosition = new Vector3();
+
             if (GPSController.Instance.userLocationStable)
             {
-                data.markerPosition.x = -(-GPSController.Instance.userWorldLocation.x + data.worldCoords.x) * MarkerController.Instance.markerScale.x;
-                data.markerPosition.z = -(-GPSController.Instance.userWorldLocation.z + data.worldCoords.z) * MarkerController.Instance.markerScale.z;
+                data.markerPosition.x = -(-GPSController.Instance.userWorldLocation.x + data.worldCoords.x);
+                data.markerPosition.z = -(-GPSController.Instance.userWorldLocation.z + data.worldCoords.z);
+
+                data.markerPosition.Normalize();
+
+                data.markerPosition.Scale(new Vector3(
+                    data.getDistanceToUserFloat() * MarkerController.Instance.unityWorldRatio.x,
+                    1,
+                    data.getDistanceToUserFloat() * MarkerController.Instance.unityWorldRatio.z)); // unity : world ratio in UnityWorldRatio
+
+                // set up markers altitude we otherwise loose with normalization
                 if (data.worldCoords.y == float.MinValue)
                     data.markerPosition.y = 0; // if no altitude information available, show marker at user altitude (0 on Y axis)
                 else
-                    data.markerPosition.y = (-GPSController.Instance.userWorldLocation.y + data.worldCoords.y) * MarkerController.Instance.markerScale.y;
+                    data.markerPosition.y = (-GPSController.Instance.userWorldLocation.y + data.worldCoords.y) 
+                        * MarkerController.Instance.unityWorldRatio.y;
+
 
                 setMarkerDisplayText();
+                
                 //Debug.Log("MARKER: " + text + " - worldLocation: " + worldCoords.ToString()+ " gamePosition: "
                 //    + markerPosition.ToString() + " game distance to user:" + Vector3.Distance(markerPosition, new Vector3(0,0,0)));
             }

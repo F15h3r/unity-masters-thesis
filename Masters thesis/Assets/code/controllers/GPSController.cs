@@ -23,7 +23,11 @@ public class GPSController : MonoBehaviour {
     private void Start()
     {
         DontDestroyOnLoad(gameObject);
-        StartCoroutine(startLocationService());
+        StartCoroutine(startLocationService()); // TODO: ODKOMENTIRAJ
+
+        //userWorldLocation.x = 0;
+        //userWorldLocation.z = 38.7302485f;
+        //userLocationStable = true;
     }
 
     private void Update()
@@ -32,9 +36,8 @@ public class GPSController : MonoBehaviour {
 
         if (timeSinceLastRefresh >= refreshInterval)
         {
-            //Debug.Log("UPDATE USER LOCATION NOW!");
             timeSinceLastRefresh = 0;
-            StartCoroutine(startLocationService());
+            StartCoroutine(startLocationService()); // TODO: ODKOMENTIRAJ
         }
     }
 

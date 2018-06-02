@@ -44,7 +44,7 @@ public class ARCameraController : MonoBehaviour {
         cameraContainer = new GameObject("Main Cam container");
         cameraContainer.transform.position = mainCamera.transform.position;
         mainCamera.transform.SetParent(cameraContainer.transform);
-        cameraContainer.transform.rotation = Quaternion.Euler(90, 0, 0);
+        cameraContainer.transform.rotation = Quaternion.Euler(90, 0, 0); // we need container because of this rotation
 
         backCamera.Play();
         bg.texture = backCamera;

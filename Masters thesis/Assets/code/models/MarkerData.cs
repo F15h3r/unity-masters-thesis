@@ -12,7 +12,7 @@ namespace Assets.code.models
     {
         public Vector3 worldCoords;
         public Vector3 markerPosition;
-        public float distanceToUser = 0;
+        public float distanceFromUser = 0;
         public string name;
         public string description;
         public string dateAdded;
@@ -24,31 +24,38 @@ namespace Assets.code.models
             return (Math.PI / 180) * angle;
         }
 
-        private void setDistanceToUser()
+        private void calculateDistanceFromUser()
         {
             double worldCoordsLat_rad = ToRadians(worldCoords.z);
             double userCoordsLat_rad = ToRadians(GPSController.Instance.userWorldLocation.z);
             double deltaLon = ToRadians(GPSController.Instance.userWorldLocation.x - worldCoords.x);
             
-            distanceToUser = (float) (Math.Acos(Math.Sin(worldCoordsLat_rad) * Math.Sin(userCoordsLat_rad)
+            distanceFromUser = (float) (Math.Acos(Math.Sin(worldCoordsLat_rad) * Math.Sin(userCoordsLat_rad)
                 + Math.Cos(worldCoordsLat_rad) * Math.Cos(userCoordsLat_rad) * Math.Cos(deltaLon)) * world_R);
         }
 
         /*
          * Return user readable distance to marker
          */
-        public string getDistanceToUser()
+        public string getDistanceToUserString()
         {
-            setDistanceToUser();
+            calculateDistanceFromUser();
 
-            if (distanceToUser > 1000)
-                return (distanceToUser / 1000).ToString("0.0") + "km";
-            if (distanceToUser < 1000 && distanceToUser >= 100)
-                return ((Math.Round(distanceToUser / 10, 0) * 10)).ToString() + "m";
-            if (distanceToUser < 100)
-                return ((Math.Round(distanceToUser, 0))).ToString() + "m";
+            if (distanceFromUser > 1000)
+                return (distanceFromUser / 1000).ToString("0.0") + "km";
+            if (distanceFromUser < 1000 && distanceFromUser >= 100)
+                return ((Math.Round(distanceFromUser / 10, 0) * 10)).ToString() + "m";
+            if (distanceFromUser < 100)
+                return ((Math.Round(distanceFromUser, 0))).ToString() + "m";
             else
-                return distanceToUser.ToString("0") + "m";
+                return distanceFromUser.ToString("0") + "m";
+        }
+
+        public float getDistanceToUserFloat()
+        {
+            calculateDistanceFromUser();
+
+            return distanceFromUser;
         }
 
     }

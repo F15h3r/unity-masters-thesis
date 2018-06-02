@@ -284,13 +284,13 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 74509764}
   m_TextComponent: {fileID: 963609430}
   m_Placeholder: {fileID: 1454794611}
-  m_ContentType: 0
+  m_ContentType: 3
   m_InputType: 0
   m_AsteriskChar: 42
-  m_KeyboardType: 0
+  m_KeyboardType: 2
   m_LineType: 0
   m_HideMobileInput: 1
-  m_CharacterValidation: 0
+  m_CharacterValidation: 2
   m_CharacterLimit: 0
   m_OnEndEdit:
     m_PersistentCalls:
@@ -2439,13 +2439,13 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 571874210}
   m_TextComponent: {fileID: 1242462786}
   m_Placeholder: {fileID: 471165313}
-  m_ContentType: 0
+  m_ContentType: 3
   m_InputType: 0
   m_AsteriskChar: 42
-  m_KeyboardType: 0
+  m_KeyboardType: 2
   m_LineType: 0
   m_HideMobileInput: 1
-  m_CharacterValidation: 0
+  m_CharacterValidation: 2
   m_CharacterLimit: 0
   m_OnEndEdit:
     m_PersistentCalls:
@@ -2935,7 +2935,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18b4d8c02a899a54ca0fc76eca0aa966, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  markerScale: {x: 0, y: 0, z: 0}
+  unityWorldRatio: {x: 0, y: 0, z: 0}
   markerPrefab: {fileID: 1319753622888452, guid: b61e26ea94af8a94f95cc2a11849cddd,
     type: 2}
   parentObject: {fileID: 1729957059}
@@ -6064,7 +6064,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Lat: XX.XXXXX, Lon: XX.XXXXX'
+  m_Text: 'Lat: XX.XXXXX, Lon: XX.XXXXX, Alt: XXX'
 --- !u!222 &1493261820
 CanvasRenderer:
   m_ObjectHideFlags: 0
