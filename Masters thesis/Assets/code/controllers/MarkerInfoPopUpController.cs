@@ -11,8 +11,7 @@ public class MarkerInfoPopUpController : MonoBehaviour {
     private MarkerData md;
     public bool isDisplayed = false;
 
-	// Use this for initialization
-	void Start () {
+	void Awake () {
         Instance = this;
         popUp.SetActive(isDisplayed);
 	}
@@ -30,8 +29,8 @@ public class MarkerInfoPopUpController : MonoBehaviour {
         popupMarkerInfoText.GetComponent<Text>().text = md.description;
         popUp.transform.FindChild("closeButton").GetComponent<Button>().onClick.AddListener(MarkerInfoPopUpController.Instance.closeMarkerInfoPopup);
         popUp.transform.FindChild("removeButton").GetComponent<Button>().onClick.AddListener(MarkerInfoPopUpController.Instance.removeMarkerInstance);
-
-        popUp.SetActive(true);
+        isDisplayed = true;
+        popUp.SetActive(isDisplayed);
     }
 
     public void closeMarkerInfoPopup()

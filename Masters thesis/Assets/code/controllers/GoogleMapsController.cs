@@ -19,7 +19,7 @@ public class GoogleMapsController : MonoBehaviour {
     public RawImage image;
     private string mapStyle = "&style=feature:administrative.land_parcel%7Cvisibility:off&style=feature:administrative.neighborhood%7Cvisibility:off&style=feature:poi.business%7Cvisibility:off&style=feature:poi.park%7Celement:labels.text%7Cvisibility:off&style=feature:road%7Celement:labels%7Cvisibility:off&style=feature:water%7Celement:labels.text%7Cvisibility:off";
     //private string mapStyle = "&maptype=roadmap"; // TODO: PREKLOPI NA ZGORNJEGA KO MARKERJI DELUJEJO
-    private static string googleApiKey = "AIzaSyApdbgfaSwua1iDr0dsAl3v4I6ZJ4Emc9c";
+    public static string googleApiKey = "AIzaSyApdbgfaSwua1iDr0dsAl3v4I6ZJ4Emc9c";
 
     public float refreshInterval = 15;
     private float timeSinceLastRefresh = 8;

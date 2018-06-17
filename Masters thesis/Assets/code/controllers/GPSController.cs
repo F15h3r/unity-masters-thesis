@@ -23,7 +23,7 @@ public class GPSController : MonoBehaviour {
     private void Start()
     {
         DontDestroyOnLoad(gameObject);
-        StartCoroutine(startLocationService()); // TODO: ODKOMENTIRAJ
+        StartCoroutine(startLocationService()); 
 
         //userWorldLocation.x = 0;
         //userWorldLocation.z = 38.7302485f;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Assets.code.models;
 using System;
+using Assets.code.controllers;
 
 public class MarkerController : MonoBehaviour {
     public static MarkerController Instance { get; set; }
@@ -10,7 +11,6 @@ public class MarkerController : MonoBehaviour {
     public GameObject markerPrefab, parentObject;
     private GameObject markerPrefabClone;
     private GoogleAltitudeController rsc;
-    private const string markersDataPlayerPrefs = "markersData";
     public List<GameObject> markers;
 
 
@@ -27,7 +27,7 @@ public class MarkerController : MonoBehaviour {
 
     private void Start()
     {
-        readMarkersFromMemory();
+        InternalDataController.readMarkersFromMemory();
     }
 
 
@@ -102,33 +102,6 @@ public class MarkerController : MonoBehaviour {
 
     #region save / load from device memory
 
-    private void readMarkersFromMemory()
-    {
-        if (PlayerPrefs.HasKey(markersDataPlayerPrefs))
-        {
-            string jsonMarkersData = PlayerPrefs.GetString(markersDataPlayerPrefs);
-            MarkersDataList mdl = new MarkersDataList();
-
-            try
-            {
-                JsonUtility.FromJsonOverwrite(jsonMarkersData, mdl);
-
-                foreach (MarkerData md in mdl.markersDataList)
-                {
-                    load3DMarkerInstance(md);
-                }
-            }
-            catch (Exception e)
-            {
-                Debug.LogError("Deserialization error: " + e.ToString());
-            }
-
-        }
-        else
-        {
-            Debug.LogError("Markers data playerPrefs doesn't exist!");
-        }
-    }
 
     public void load3DMarkerInstance(MarkerData markerData)
     {
@@ -143,40 +116,15 @@ public class MarkerController : MonoBehaviour {
         markers.Add(markerPrefabClone);
     }
 
-    private string serializeMarkers()
-    {
-        string dataToSave = "{\"markersDataList\":[";
-        if(markers.Count > 0)
-        {
-            foreach (GameObject go in markers)
-            {
-                dataToSave += JsonUtility.ToJson(go.GetComponent<Marker>().data) + ",";
-            }
-            dataToSave = dataToSave.Substring(0, dataToSave.Length - 1) + "]}";
-        }
-        else
-        {
-            dataToSave += "]}";
-        }
-
-        return dataToSave;
-    }
-
-    private void saveSerializedMarkersList()
-    {
-        PlayerPrefs.SetString(markersDataPlayerPrefs, serializeMarkers());
-        PlayerPrefs.Save();
-    }
-
     public void OnApplicationPause(bool pause)
     {
         if(pause)
-            saveSerializedMarkersList();
+            InternalDataController.saveSerializedMarkersList();
     }
 
     public void OnApplicationQuit()
     {
-        saveSerializedMarkersList();
+        InternalDataController.saveSerializedMarkersList();
     }
 
     #endregion
