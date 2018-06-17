@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Assets.code.controllers;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,7 +18,10 @@ public class GPSController : MonoBehaviour {
     {
         Instance = this;
         userWorldLocation = new Vector3(float.MinValue, float.MinValue, float.MinValue);
-        rsc = gameObject.AddComponent(typeof(GoogleAltitudeController)) as GoogleAltitudeController;        
+        rsc = gameObject.AddComponent(typeof(GoogleAltitudeController)) as GoogleAltitudeController;
+
+        if(PlayerPrefs.HasKey(InternalDataController.GPSRefreshFreqSetting))
+            refreshInterval = float.Parse(InternalDataController.loadValue(InternalDataController.GPSRefreshFreqSetting));
     }
 
     private void Start()

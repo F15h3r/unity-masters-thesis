@@ -9,13 +9,19 @@ namespace Assets.code.controllers
 {
     class InternalDataController
     {
-        private const string markersDataPlayerPrefs = "markersData";
+        public const string markersData = "markersData";
+        public static string 
+            developmentSetting = "devON",
+            GPSRefreshFreqSetting = "gpsRefFreq",
+            googleMapUpdateSetting = "googlMapsFreq";
+
+
 
         public static void readMarkersFromMemory()
         {
-            if (PlayerPrefs.HasKey(markersDataPlayerPrefs))
+            if (PlayerPrefs.HasKey(markersData))
             {
-                string jsonMarkersData = PlayerPrefs.GetString(markersDataPlayerPrefs);
+                string jsonMarkersData = PlayerPrefs.GetString(markersData);
                 MarkersDataList mdl = new MarkersDataList();
 
                 try
@@ -60,7 +66,7 @@ namespace Assets.code.controllers
 
         public static void saveSerializedMarkersList()
         {
-            PlayerPrefs.SetString(markersDataPlayerPrefs, serializeMarkers());
+            PlayerPrefs.SetString(markersData, serializeMarkers());
             PlayerPrefs.Save();
         }
 

@@ -6,9 +6,7 @@ using UnityEngine.UI;
 
 public class SettingsController : MonoBehaviour {
     public static SettingsController Instance { get; set; }
-    public static string developmentSetting = "devON", 
-        GPSRefreshFreqSetting = "gpsRefFreq", 
-        googleMapUpdateSetting = "googlMapsFreq";
+
     public GameObject popUp;
     public InputField GPSRefreshFreq;
     public Toggle debugToggle;
@@ -19,7 +17,6 @@ public class SettingsController : MonoBehaviour {
     {
         Instance = this;
         popUp.SetActive(isDisplayed);
-        loadSettings();
     }
 
     public void toggleSettingsPopup()
@@ -39,15 +36,21 @@ public class SettingsController : MonoBehaviour {
 
     private void loadSettings()
     {
-        debugToggle.isOn = (InternalDataController.loadValue(developmentSetting) == "True") ? true : false;
-        GPSRefreshFreq.text = InternalDataController.loadValue(GPSRefreshFreqSetting);
+        debugToggle.isOn = UpdateGpsText.enabled = (InternalDataController.loadValue(InternalDataController.developmentSetting) == "True") ? true : false;
+
+        GPSRefreshFreq.text = InternalDataController.loadValue(InternalDataController.GPSRefreshFreqSetting);
+        GPSController.Instance.refreshInterval = float.Parse(GPSRefreshFreq.text);
+
+
     }
 
     private void saveSettings()
     {
-        InternalDataController.saveValue(developmentSetting, debugToggle.isOn.ToString());
-        InternalDataController.saveValue(GPSRefreshFreqSetting, GPSRefreshFreq.text);
-        InternalDataController.saveValue(googleMapUpdateSetting, googleMapUpdateSetting.ToString());
+        UpdateGpsText.enabled = debugToggle.isOn;
+        GPSController.Instance.refreshInterval = float.Parse(GPSRefreshFreq.text);
+
+        InternalDataController.saveValue(InternalDataController.developmentSetting, debugToggle.isOn.ToString());
+        InternalDataController.saveValue(InternalDataController.GPSRefreshFreqSetting, GPSRefreshFreq.text);
     }
 
 }
