@@ -23,7 +23,7 @@ namespace Assets.code
                 setAltitude(worldCoords.y);
             setMarkerName(name);
             data.description = description;
-            data.dateAdded = DateTime.Now.ToString("dd.MM.yyyy, H:mm");
+            data.dateAdded = Application.Utils.dateToday();
 
             transform.gameObject.GetComponentInChildren<Button>().onClick.AddListener(
                 delegate { MarkerInfoPopUpController.Instance.showMarkerInfoPopup(data); });

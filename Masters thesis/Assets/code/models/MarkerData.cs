@@ -17,6 +17,7 @@ namespace Assets.code.models
         public string description;
         public string dateAdded;
         public bool visible = true;
+        public bool acquiredOnline = false;
         public static double world_R = 6371000; // world r in meters
 
         public double ToRadians(double angle)

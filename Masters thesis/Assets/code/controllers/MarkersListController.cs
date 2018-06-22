@@ -20,16 +20,22 @@ public class MarkersListController : MonoBehaviour {
         MarkersMenuCanvas.SetActive(isDisplayed);
     }
 
+    public void toggleMenuBtnClick()
+    {
+        toggleMarkersMenu();
+    }
 
-    public void toggleMarkersMenu()
+
+    public void toggleMarkersMenu(bool webMarkers = false, List<MarkerData> markersList = null)
     {
         MarkerInfoPopUpController.Instance.closeMarkerInfoPopup();
         MarkerAddPopupController.Instance.closeMarkerAddPopup();
 
         isDisplayed = !isDisplayed;
-
+        
         if (isDisplayed)
-            refreshAllMarkersList();
+            refreshAllMarkersList(webMarkers, markersList);
+            
         MarkersMenuCanvas.SetActive(isDisplayed);
     }
 
@@ -43,17 +49,36 @@ public class MarkersListController : MonoBehaviour {
     }
 
 
-    public void refreshAllMarkersList()
+    public void refreshAllMarkersList(bool webMarkers = false, List<MarkerData> markersList = null)
     {
-        removeAllMarkersMenuItems();
-        addAllMarkersMenuItems();
+        if(!webMarkers)
+        {
+            removeAllMarkersMenuItems();
+            addAllLocalMarkersMenuItems();
+        }
+        else
+        {
+            removeAllMarkersMenuItems();
+            if (markersList != null)
+                addAllMarkersFromList(markersList);
+            else
+                Debug.LogError("No Markers provided to display!");
+        }
+            
     }
 
 
-    private void addAllMarkersMenuItems()
+    private void addAllLocalMarkersMenuItems()
     {
         foreach(GameObject marker in MarkerController.Instance.markers)
             addMarkerButtonToList(marker.GetComponent<Marker>().data);
+    }
+
+    public void addAllMarkersFromList(List<MarkerData> markers)
+    {
+
+        foreach (MarkerData marker in markers)
+            addMarkerButtonToList(marker);
     }
 
     private void addMarkerButtonToList(MarkerData markerData)

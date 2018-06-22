@@ -9,8 +9,8 @@ namespace Assets.code.controllers
 {
     class InternalDataController
     {
-        public const string markersData = "markersData";
         public static string 
+            markersData = "markersData",
             developmentSetting = "devON",
             GPSRefreshFreqSetting = "gpsRefFreq",
             googleMapUpdateSetting = "googlMapsFreq";

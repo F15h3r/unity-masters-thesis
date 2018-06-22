@@ -41,7 +41,16 @@ public class GPSController : MonoBehaviour {
         if (timeSinceLastRefresh >= refreshInterval)
         {
             timeSinceLastRefresh = 0;
-            StartCoroutine(startLocationService()); // TODO: ODKOMENTIRAJ
+
+            if (userLocationStable)
+            {
+                userWorldLocation.z = Input.location.lastData.latitude;
+                userWorldLocation.x = Input.location.lastData.longitude;
+                userWorldLocation.y = rsc.getUserElevation(userWorldLocation).y;
+            }
+            else StartCoroutine(startLocationService());
+
+            
         }
     }
 
@@ -55,7 +64,9 @@ public class GPSController : MonoBehaviour {
         }
 
         maxAttempts = 20;
+
         Input.location.Start();
+
         while(Input.location.status == LocationServiceStatus.Initializing && maxAttempts > 0)
         {
             yield return new WaitForSeconds(1);
@@ -85,8 +96,7 @@ public class GPSController : MonoBehaviour {
         }
         else
         {
-            userLocationStable = false;
-            Debug.LogWarning("location NOT found! atempts: " + (20 - maxAttempts) + " current location reading = lat:"
+            locationWarning("location NOT found! atempts: " + (20 - maxAttempts) + " current location reading = lat:"
                 + Input.location.lastData.latitude +" lon:"+ Input.location.lastData.longitude);
         }
 

@@ -18,7 +18,7 @@ public class MarkerInfoPopUpController : MonoBehaviour {
 
     public void showMarkerInfoPopup(MarkerData markerData)
     {
-        MarkersListController.Instance.closeMarkersMenu();
+        //MarkersListController.Instance.closeMarkersMenu();
         MarkerAddPopupController.Instance.closeMarkerAddPopup();
         
         md = markerData;
@@ -28,7 +28,19 @@ public class MarkerInfoPopUpController : MonoBehaviour {
         popUp.transform.FindChild("markerDate").GetComponent<Text>().text = markerData.dateAdded;
         popupMarkerInfoText.GetComponent<Text>().text = md.description;
         popUp.transform.FindChild("closeButton").GetComponent<Button>().onClick.AddListener(MarkerInfoPopUpController.Instance.closeMarkerInfoPopup);
-        popUp.transform.FindChild("removeButton").GetComponent<Button>().onClick.AddListener(MarkerInfoPopUpController.Instance.removeMarkerInstance);
+        
+        popUp.transform.FindChild("hideButton").GetComponent<Button>().onClick.AddListener(MarkerInfoPopUpController.Instance.toggleMarkerVisibility);
+
+        if (md.acquiredOnline)
+        {
+            popUp.transform.FindChild("hideButton").gameObject.SetActive(false);
+        }
+        else
+        {
+            popUp.transform.FindChild("hideButton").gameObject.SetActive(true);
+        }
+
+
         isDisplayed = true;
         popUp.SetActive(isDisplayed);
     }
@@ -37,11 +49,11 @@ public class MarkerInfoPopUpController : MonoBehaviour {
     {
         isDisplayed = false;
         popUp.SetActive(isDisplayed);
+        
     }
 
-    public void removeMarkerInstance()
+    public void toggleMarkerVisibility()
     {
-        MarkerController.Instance.remove3DMarkerInstance(md);
-        popUp.SetActive(false);
+            MarkerController.Instance.toggle3DMarkerVisibility(md);
     }
 }

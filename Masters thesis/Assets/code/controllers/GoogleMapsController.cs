@@ -18,8 +18,6 @@ public class GoogleMapsController : MonoBehaviour {
 
     public RawImage image;
     private string mapStyle = "&style=feature:administrative.land_parcel%7Cvisibility:off&style=feature:administrative.neighborhood%7Cvisibility:off&style=feature:poi.business%7Cvisibility:off&style=feature:poi.park%7Celement:labels.text%7Cvisibility:off&style=feature:road%7Celement:labels%7Cvisibility:off&style=feature:water%7Celement:labels.text%7Cvisibility:off";
-    //private string mapStyle = "&maptype=roadmap"; // TODO: PREKLOPI NA ZGORNJEGA KO MARKERJI DELUJEJO
-    public static string googleApiKey = "AIzaSyApdbgfaSwua1iDr0dsAl3v4I6ZJ4Emc9c";
 
     public float refreshInterval = 15;
     private float timeSinceLastRefresh = 8;
@@ -36,7 +34,7 @@ public class GoogleMapsController : MonoBehaviour {
             + "&size=" + width + "x" + height
             + "&scale=" + scale
             + "&maptype=" + selectedMapType
-            + "&key=" + googleApiKey
+            + "&key=" + Application.googleApiKey
             + mapStyle;
 
         foreach(GameObject go in MarkerController.Instance.markers)
@@ -65,7 +63,7 @@ public class GoogleMapsController : MonoBehaviour {
             }
 
             image.texture = www.texture;
-            Debug.Log("Map image w:" + www.texture.width + " h:" + www.texture.height);
+            //Debug.Log("Map image w:" + www.texture.width + " h:" + www.texture.height);
 
         }
     }

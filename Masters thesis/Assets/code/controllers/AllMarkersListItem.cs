@@ -8,29 +8,43 @@ using UnityEngine.UI;
 public class AllMarkersListItem : MonoBehaviour {
     public Button deleteButton;
     public Button toggleVisible;
+    public Button markerButton;
     public Text markerText;
+    public Text markerDistanceText;
+    public Sprite addButtonSprite;
     public AllMarkersListItem clickListenerScript;
 
 
     private MarkerData markerData;
-
-	// Use this for initialization
-	void Start () {
-        
-    }
 	
     public void Setup(MarkerData md)
     {
         markerData = md;
 
         markerText.text = markerData.name;
-        if (md.visible)
-            toggleVisible.gameObject.GetComponent<Text>().text = "Hide";
-        else
-            toggleVisible.gameObject.GetComponent<Text>().text = "Show";
+        markerDistanceText.text = markerData.getDistanceToUserString();
 
-        deleteButton.onClick.AddListener(removeClick);
+        if(md.acquiredOnline)
+        {
+            toggleVisible.gameObject.SetActive(false);
+            deleteButton.transform.GetComponent<Image>().sprite = addButtonSprite;
+        }
+        else
+        {
+            if (md.visible)
+                toggleVisible.gameObject.GetComponent<Text>().text = "Hide";
+            else
+                toggleVisible.gameObject.GetComponent<Text>().text = "Show";
+        }
+
+
+        if(markerData.acquiredOnline)
+            deleteButton.onClick.AddListener(saveMarker);
+        else
+            deleteButton.onClick.AddListener(removeClick);
+
         toggleVisible.onClick.AddListener(toggleVisibility);
+        markerButton.onClick.AddListener(selectMarker);
     }
 
     public void removeClick()
@@ -40,18 +54,28 @@ public class AllMarkersListItem : MonoBehaviour {
         GoogleMapsController.Instance.reloadMapImage();
     }
 
+    public void saveMarker()
+    {
+        MarkerController.Instance.add3DMarkerInstance(markerData.worldCoords, markerData.name, markerData.description);
+        MarkersListController.Instance.refreshAllMarkersList();
+        GoogleMapsController.Instance.reloadMapImage();
+    }
+
     private void toggleVisibility()
     {
-        markerData.visible = !markerData.visible;
 
-        if(markerData.visible)
+        if(!markerData.visible)
             toggleVisible.gameObject.GetComponent<Text>().text = "Hide";
         else
             toggleVisible.gameObject.GetComponent<Text>().text = "Show";
 
-        MarkerController.Instance.update3DMarkerVisibility(markerData);
-
-        gameObject.GetComponentInParent<MarkersListController>().refreshAllMarkersList();
+        MarkerController.Instance.toggle3DMarkerVisibility(markerData);
+        MarkersListController.Instance.refreshAllMarkersList();
         GoogleMapsController.Instance.reloadMapImage();
+    }
+
+    public void selectMarker()
+    {
+        MarkerInfoPopUpController.Instance.showMarkerInfoPopup(markerData);
     }
 }

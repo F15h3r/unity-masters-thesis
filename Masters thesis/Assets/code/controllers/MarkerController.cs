@@ -41,11 +41,11 @@ public class MarkerController : MonoBehaviour {
             
         }
 
-        update3DMarkers();
+        updateVisible3DMarkers();
 
     }
 
-    private void update3DMarkers()
+    private void updateVisible3DMarkers()
     {
         foreach (GameObject marker in markers)
         {
@@ -86,8 +86,10 @@ public class MarkerController : MonoBehaviour {
         markers.Add(markerPrefabClone);
     }
     
-    public void update3DMarkerVisibility(MarkerData markerData)
+    public void toggle3DMarkerVisibility(MarkerData markerData)
     {
+        markerData.visible = !markerData.visible;
+
         for (int i = markers.Count - 1; i >= 0; i--)
         {
             if (markers[i].GetComponent<Marker>().data == markerData)
