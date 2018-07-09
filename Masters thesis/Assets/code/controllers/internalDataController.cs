@@ -9,13 +9,33 @@ namespace Assets.code.controllers
 {
     class InternalDataController
     {
-        public static string 
+        public static string
             markersData = "markersData",
             developmentSetting = "devON",
             GPSRefreshFreqSetting = "gpsRefFreq",
-            googleMapUpdateSetting = "googlMapsFreq";
+            mapsRefreshFreqSetting = "mapsRefFreq",
+            mapsZoomLevelSetting = "mapsZoomLevel";
 
 
+        public static void init()
+        {
+            if (!PlayerPrefs.HasKey(markersData))
+                PlayerPrefs.SetString(markersData, "");
+
+            if (!PlayerPrefs.HasKey(developmentSetting))
+                PlayerPrefs.SetString(developmentSetting, "False");
+
+            if (!PlayerPrefs.HasKey(GPSRefreshFreqSetting))
+                PlayerPrefs.SetString(GPSRefreshFreqSetting, "5");
+
+            if (!PlayerPrefs.HasKey(mapsRefreshFreqSetting))
+                PlayerPrefs.SetString(mapsRefreshFreqSetting, "0");
+
+            if (!PlayerPrefs.HasKey(mapsZoomLevelSetting))
+                PlayerPrefs.SetString(mapsZoomLevelSetting, "14");
+
+            PlayerPrefs.Save();
+        }
 
         public static void readMarkersFromMemory()
         {

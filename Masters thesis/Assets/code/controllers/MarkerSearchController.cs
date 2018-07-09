@@ -1,4 +1,5 @@
-﻿using Assets.code.models;
+﻿using Assets.code.controllers;
+using Assets.code.models;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -50,25 +51,11 @@ public class MarkerSearchController : MonoBehaviour {
 
     private IEnumerator getSearchResults(string url)
     {
-        Handheld.StartActivityIndicator();
 
-        WWW www = new WWW(url);
-        while (!www.isDone)
-            yield return null;
+        wwwController wCtrl = gameObject.AddComponent<wwwController>();
+        yield return StartCoroutine(wCtrl.wwwRequest(url));
+        JSONDecodeGoogleSearchResponse(wCtrl.www.text);
 
-        if (string.IsNullOrEmpty(www.error))
-        {
-            //Debug.Log(www.text);
-
-            if (!string.IsNullOrEmpty(www.text))
-                JSONDecodeGoogleSearchResponse(www.text);
-            else
-                Debug.LogError("SearchController:www.text response empty!");
-        }
-        else
-            Debug.LogError(www.error);
-
-        Handheld.StopActivityIndicator();
     }
 
     private void JSONDecodeGoogleSearchResponse(string wwwResponse)

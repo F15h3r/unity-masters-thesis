@@ -1,26 +1,52 @@
 ﻿using Assets.code;
+using Assets.code.controllers;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+
 public class GoogleMapsController : MonoBehaviour {
     public static GoogleMapsController Instance { get; set; }
     private string url;
-    private int zoom = 13;
+    private int Zoom = 14;
+    public int zoom
+    {
+        set
+        {
+            if (value >= 10 && value <= 20)
+                Zoom = value;
+
+            reloadMapImage();
+        }
+
+        get { return Zoom; }
+    }
     private int width = 640;
     private int height = 640;
     private float downloadTime = 0;
 
     private enum MapType { roadmap, satellite, hybrid, terrain };
     private MapType selectedMapType = MapType.roadmap;
-    private int scale = 2; // scale 2 makes returning images 1280x1280
+    private int scale = 2; // scale 2 sets returning images resolution to 1280x1280
 
     public RawImage image;
     private string mapStyle = "&style=feature:administrative.land_parcel%7Cvisibility:off&style=feature:administrative.neighborhood%7Cvisibility:off&style=feature:poi.business%7Cvisibility:off&style=feature:poi.park%7Celement:labels.text%7Cvisibility:off&style=feature:road%7Celement:labels%7Cvisibility:off&style=feature:water%7Celement:labels.text%7Cvisibility:off";
+    private Vector3 previousUserPosition;
+    public float refreshInterval = 0;
+    private float timeSinceLastRefresh = 10;
 
-    public float refreshInterval = 15;
-    private float timeSinceLastRefresh = 8;
+    void Awake()
+    {
+        Instance = this;
+
+        if (PlayerPrefs.HasKey(InternalDataController.mapsRefreshFreqSetting))
+            refreshInterval = float.Parse(InternalDataController.loadValue(InternalDataController.mapsRefreshFreqSetting));
+
+        if (PlayerPrefs.HasKey(InternalDataController.mapsZoomLevelSetting))
+            refreshInterval = float.Parse(InternalDataController.loadValue(InternalDataController.mapsZoomLevelSetting));
+        
+    }
 
     IEnumerator getMap()
     {
@@ -45,41 +71,33 @@ public class GoogleMapsController : MonoBehaviour {
 
         if (GPSController.Instance.userLocationStable)
         {
-            WWW www = new WWW(url);
-            downloadTime = 0;
-
-            while (!www.isDone)
-            {
-                downloadTime += Time.deltaTime;
-                if (downloadTime >= 10.0f) break;
-                // print("GMaps DL: " + www.progress);
-                yield return null;
-            }
-
-            if (!www.isDone || !string.IsNullOrEmpty(www.error))
-            {
-                Debug.LogError("Load Failed");
-                yield break;
-            }
-
-            image.texture = www.texture;
-            //Debug.Log("Map image w:" + www.texture.width + " h:" + www.texture.height);
-
+            wwwController wCtrl = gameObject.AddComponent<wwwController>();
+            yield return StartCoroutine(wCtrl.wwwRequest(url));
+            image.texture = wCtrl.www.texture;
+            
         }
-    }
 
-	void Start () {
-        Instance = this;
-	}
+        yield return null;
+    }
 
     void Update()
     {
-        timeSinceLastRefresh += Time.unscaledDeltaTime;
-
-        if (timeSinceLastRefresh >= refreshInterval)
+        
+        if(refreshInterval == 0)
         {
-            reloadMapImage();
+            if (GPSController.Instance.userWorldLocation != previousUserPosition)
+                reloadMapImage();
         }
+        else
+        {
+            timeSinceLastRefresh += Time.unscaledDeltaTime;
+
+            if (timeSinceLastRefresh >= refreshInterval)
+            {
+                reloadMapImage();
+            }
+        }
+
     }
 
     /*
@@ -87,7 +105,9 @@ public class GoogleMapsController : MonoBehaviour {
      */
     public void reloadMapImage()
     {
+        Debug.Log("RELOADING MAP IMAGE");
         timeSinceLastRefresh = 0;
+        StopAllCoroutines();
         StartCoroutine(getMap());
     }
 }

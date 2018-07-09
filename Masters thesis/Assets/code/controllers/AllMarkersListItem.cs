@@ -56,6 +56,7 @@ public class AllMarkersListItem : MonoBehaviour {
 
     public void saveMarker()
     {
+        markerData.worldCoords.y = float.MinValue; // this forces acquiring altitude from googleAltitudeController
         MarkerController.Instance.add3DMarkerInstance(markerData.worldCoords, markerData.name, markerData.description);
         MarkersListController.Instance.refreshAllMarkersList();
         GoogleMapsController.Instance.reloadMapImage();

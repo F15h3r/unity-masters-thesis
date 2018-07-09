@@ -1,17 +1,19 @@
-﻿using Assets.code.models;
+﻿using Assets.code.controllers;
+using Assets.code.models;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Application : MonoBehaviour {
-    public static Vector3 userGamePosition;
+    public static Vector3 userGamePosition = new Vector3(0, 0, 0);
     public static string googleApiKey = "AIzaSyApdbgfaSwua1iDr0dsAl3v4I6ZJ4Emc9c";
 
     private void Awake()
     {
         Screen.sleepTimeout = SleepTimeout.NeverSleep;
-        userGamePosition = new Vector3(0, 0, 0);     
+        InternalDataController.init();
+            
     }
 
 

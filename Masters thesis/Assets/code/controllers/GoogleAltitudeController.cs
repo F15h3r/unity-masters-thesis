@@ -5,6 +5,7 @@ using UnityEngine.Networking;
 using System.Text;
 using System;
 using Assets.code;
+using Assets.code.controllers;
 
 public class GoogleAltitudeController : MonoBehaviour
 {
@@ -17,6 +18,7 @@ public class GoogleAltitudeController : MonoBehaviour
         userWorldCoords.z = location.z;
 
         StartCoroutine(getGoogleElevation());
+
         location.y = userWorldCoords.y;
         //Debug.Log("getElevation(Vector3 location): LAT: " + location.z + " LON: " + location.x + " ALT: " + location.y);
         
@@ -52,18 +54,10 @@ public class GoogleAltitudeController : MonoBehaviour
         string url = "https://maps.googleapis.com/maps/api/elevation/json?locations=" 
             + userWorldCoords.z.ToString() + "," + userWorldCoords.x.ToString() 
             + "&key=" + googleApiKey;
-        //Debug.Log("URL: " + url);
-        WWW www = new WWW(url);
-        while (!www.isDone)
-            yield return null;
-
-        if (string.IsNullOrEmpty(www.error))
-        {
-            //Debug.Log(www.text);
-            userWorldCoords.y = JSONDecodeGoogleElevation(www.text);
-        }
-        else
-            Debug.Log(www.error);
+        
+        wwwController wCtrl = gameObject.AddComponent<wwwController>();
+        yield return StartCoroutine(wCtrl.wwwRequest(url));
+        userWorldCoords.y = JSONDecodeGoogleElevation(wCtrl.www.text);
     }
     
     private static float JSONDecodeGoogleElevation(string wwwResponse)
