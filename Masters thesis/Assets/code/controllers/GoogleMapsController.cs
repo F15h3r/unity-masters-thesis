@@ -28,11 +28,11 @@ public class GoogleMapsController : MonoBehaviour {
 
     private enum MapType { roadmap, satellite, hybrid, terrain };
     private MapType selectedMapType = MapType.roadmap;
-    private int scale = 2; // scale 2 sets returning images resolution to 1280x1280
+    private int scale = 2; // scale 2 sets returning image resolution of 1280x1280
 
     public RawImage image;
     private string mapStyle = "&style=feature:administrative.land_parcel%7Cvisibility:off&style=feature:administrative.neighborhood%7Cvisibility:off&style=feature:poi.business%7Cvisibility:off&style=feature:poi.park%7Celement:labels.text%7Cvisibility:off&style=feature:road%7Celement:labels%7Cvisibility:off&style=feature:water%7Celement:labels.text%7Cvisibility:off";
-    private Vector3 previousUserPosition;
+    private Vector3 lastUserWorldLocation;
     public float refreshInterval = 0;
     private float timeSinceLastRefresh = 10;
 
@@ -44,7 +44,7 @@ public class GoogleMapsController : MonoBehaviour {
             refreshInterval = float.Parse(InternalDataController.loadValue(InternalDataController.mapsRefreshFreqSetting));
 
         if (PlayerPrefs.HasKey(InternalDataController.mapsZoomLevelSetting))
-            refreshInterval = float.Parse(InternalDataController.loadValue(InternalDataController.mapsZoomLevelSetting));
+            zoom = int.Parse(InternalDataController.loadValue(InternalDataController.mapsZoomLevelSetting));
         
     }
 
@@ -56,7 +56,7 @@ public class GoogleMapsController : MonoBehaviour {
         url = "https://maps.googleapis.com/maps/api/staticmap?center="
             + GPSController.Instance.userWorldLocation.z + ","
             + GPSController.Instance.userWorldLocation.x
-            + "&zoom=" + zoom
+            + "&zoom=" + Zoom
             + "&size=" + width + "x" + height
             + "&scale=" + scale
             + "&maptype=" + selectedMapType
@@ -71,10 +71,12 @@ public class GoogleMapsController : MonoBehaviour {
 
         if (GPSController.Instance.userLocationStable)
         {
+
             wwwController wCtrl = gameObject.AddComponent<wwwController>();
             yield return StartCoroutine(wCtrl.wwwRequest(url));
             image.texture = wCtrl.www.texture;
-            
+            Destroy(wCtrl);
+
         }
 
         yield return null;
@@ -85,8 +87,13 @@ public class GoogleMapsController : MonoBehaviour {
         
         if(refreshInterval == 0)
         {
-            if (GPSController.Instance.userWorldLocation != previousUserPosition)
-                reloadMapImage();
+            if (GPSController.Instance.userLocationStable)
+                if (GPSController.Instance.userWorldLocation != lastUserWorldLocation) // Reload map on user move
+                {
+                    reloadMapImage();
+                    lastUserWorldLocation = GPSController.Instance.userWorldLocation;
+                }
+
         }
         else
         {

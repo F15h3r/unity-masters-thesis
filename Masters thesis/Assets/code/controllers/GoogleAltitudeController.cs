@@ -58,6 +58,7 @@ public class GoogleAltitudeController : MonoBehaviour
         wwwController wCtrl = gameObject.AddComponent<wwwController>();
         yield return StartCoroutine(wCtrl.wwwRequest(url));
         userWorldCoords.y = JSONDecodeGoogleElevation(wCtrl.www.text);
+        Destroy(wCtrl);
     }
     
     private static float JSONDecodeGoogleElevation(string wwwResponse)

@@ -11,15 +11,16 @@ public class MarkerSearchController : MonoBehaviour {
     public Button search, close;
     public GameObject popUp;
     public bool isDisplayed = false;
-    public int searchRadius = 8000;
+    public int searchRadius = 10000;
     public List<MarkerData> lastResults;
+    private MarkerData md;
 
 
     public void Awake()
     {
         Instance = this;
-        lastResults = new List<MarkerData>();
         popUp.SetActive(isDisplayed);
+        lastResults = new List<MarkerData>();
     }
 
     public void toggleSearch()
@@ -27,8 +28,6 @@ public class MarkerSearchController : MonoBehaviour {
         isDisplayed = !isDisplayed;
         popUp.SetActive(isDisplayed);
         MarkersListController.Instance.closeMarkersMenu();
-        
-        
     }
 
     public void searchStringGoogleMaps(string next_page_token = "")
@@ -54,50 +53,59 @@ public class MarkerSearchController : MonoBehaviour {
 
         wwwController wCtrl = gameObject.AddComponent<wwwController>();
         yield return StartCoroutine(wCtrl.wwwRequest(url));
-        JSONDecodeGoogleSearchResponse(wCtrl.www.text);
+        yield return StartCoroutine(JSONDecodeGoogleSearchResponse(wCtrl.www.text));
 
+        Destroy(wCtrl);
     }
 
-    private void JSONDecodeGoogleSearchResponse(string wwwResponse)
+    private IEnumerator JSONDecodeGoogleSearchResponse(string wwwResponse)
     {
-        lastResults.Clear();
-
-        JSONObject j = new JSONObject(wwwResponse);
-        if (j["status"].ToString().Contains("OK"))
+        if(wwwResponse != null)
         {
-            //Debug.Log("St rezultatov: " + j["results"].Count);
-            for(int i = 0; i < j["results"].Count; i++)
+            JSONObject j = new JSONObject(wwwResponse);
+
+            if (j["status"].ToString().Contains("OK"))
             {
-                MarkerData md = new MarkerData();
-                md.acquiredOnline = true;
-                md.dateAdded = Application.Utils.dateToday();
-                md.worldCoords = new Vector3(float.Parse(j["results"][i]["geometry"]["location"]["lng"].ToString()),
-                    0,
-                    float.Parse(j["results"][i]["geometry"]["location"]["lat"].ToString()));
+                lastResults = new List<MarkerData>();
 
-                md.name = j["results"][i].GetField("name").str;
+                for(int i = 0; i < j["results"].Count; i++)
+                {
+                    md = new MarkerData();
+                    
+                    md.acquiredOnline = true;
+                    md.dateAdded = Application.Utils.dateToday();
+                    
+                    md.worldCoords = new Vector3(float.Parse(j["results"][i]["geometry"]["location"]["lng"].ToString()),
+                        0,
+                        float.Parse(j["results"][i]["geometry"]["location"]["lat"].ToString()));
+
+                    md.name = j["results"][i].GetField("name").str.ToString();
                 
-                if(j["results"][i].HasField("formatted_address"))
-                    md.description += "Address:\n" + j["results"][i].GetField("formatted_address").str + "\n\n";
-                if (j["results"][i].HasField("rating"))
-                    md.description += "Rating: " + j["results"][i]["rating"].ToString() + " stars \n";
-                if (j["results"][i].HasField("opening_hours"))
-                    md.description += "Open now: " + j["results"][i]["opening_hours"]["open_now"].ToString() + "\n\n";
-                md.visible = false;
+                    if (j["results"][i].HasField("formatted_address"))
+                        md.description += "Address:\n" + j["results"][i].GetField("formatted_address").str + "\n\n";
+                    if (j["results"][i].HasField("rating"))
+                        md.description += "Google users rating: " + j["results"][i]["rating"].ToString() + " stars \n";
 
-                lastResults.Add(md);
+                    md.visible = false;
+                    
+                    lastResults.Add(md);
+                }
+
             }
-        }
-        else if(j["status"].ToString().Contains("ZERO_RESULTS"))
-        {
-            Debug.Log("No results found!");
-        }
-        else Debug.LogError("CANT DECODE MESSAGE WITH CONTENT:\n" + wwwResponse);
+            else if(j["status"].ToString().Contains("ZERO_RESULTS"))
+            {
+                Debug.Log("NO RESULTS FOUND!");
+                lastResults.Clear();
+            }
+            else Debug.LogError("CANT DECODE MESSAGE WITH CONTENT:\n" + wwwResponse);
 
-        //MarkersListController.Instance.refreshAllMarkersList(true, results);
 
-        if(MarkersListController.Instance.isDisplayed)
-            MarkersListController.Instance.toggleMarkersMenu(); // hide menu
-        MarkersListController.Instance.toggleMarkersMenu(true, lastResults); // show menu with new data
+            if(MarkersListController.Instance.isDisplayed)
+                MarkersListController.Instance.toggleMarkersMenu(); // hide menu
+            MarkersListController.Instance.toggleMarkersMenu(true, lastResults); // show menu with new data
+
+            yield return lastResults;
+        }
+
     }
 }

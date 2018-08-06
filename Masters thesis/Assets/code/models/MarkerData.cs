@@ -10,6 +10,7 @@ namespace Assets.code.models
     [System.Serializable]
     public class MarkerData
     {
+        
         public Vector3 worldCoords;
         public Vector3 markerPosition;
         public float distanceFromUser = 0;
@@ -25,6 +26,9 @@ namespace Assets.code.models
             return (Math.PI / 180) * angle;
         }
 
+        /*
+         *  Distance calculation
+         */
         private void calculateDistanceFromUser()
         {
             double worldCoordsLat_rad = ToRadians(worldCoords.z);

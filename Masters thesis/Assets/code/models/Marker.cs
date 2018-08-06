@@ -15,7 +15,6 @@ namespace Assets.code
 
         public void Setup(Vector3 worldCoords, string name, string description)
         {
-            print("Marker  setup for " + name);
             data = new MarkerData();
             setLatitude(worldCoords.z);
             setLongitude(worldCoords.x);
@@ -31,7 +30,6 @@ namespace Assets.code
             transform.LookAt(new Vector3(0, -10, 0)); // Look at the camera
 
             setRelativeGamePosition();
-            print("Marker " + name + " set up correctly");
         }
 
         public void loadFromMarkerData(MarkerData md)

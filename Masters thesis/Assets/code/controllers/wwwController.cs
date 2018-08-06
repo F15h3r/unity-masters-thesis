@@ -29,7 +29,7 @@ namespace Assets.code.controllers
                     
                     yield return null;
                 }
-                Debug.Log("DL AT: " + (www.progress * 100) + " %  in  " + downloadTime + "s / " + timeLimit + "s");
+                Debug.Log("WWW transfer from "+url.Substring(8, 40)+".. @: " + (www.progress * 100) + "% in " + downloadTime + "s / " + timeLimit + "s");
 
                 if (!www.isDone || !string.IsNullOrEmpty(www.error))
                 {
